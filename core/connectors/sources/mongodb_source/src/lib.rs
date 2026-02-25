@@ -454,10 +454,13 @@ impl MongoDbSource {
 
         // Delete or mark documents FIRST (before checkpointing)
         // This ensures we don't checkpoint an offset if mark/delete fails
+        // Pass max_offset directly to avoid reading stale offset from state
         if self.config.delete_after_read.unwrap_or(false) {
-            self.delete_processed_documents().await?;
+            self.delete_processed_documents(max_offset.as_deref())
+                .await?;
         } else if let Some(processed_field) = &self.config.processed_field {
-            self.mark_documents_processed(processed_field).await?;
+            self.mark_documents_processed(processed_field, max_offset.as_deref())
+                .await?;
         }
 
         // THEN update state with new offset (only after successful mark/delete)
@@ -587,16 +590,11 @@ impl MongoDbSource {
         Ok(filter)
     }
 
-    async fn delete_processed_documents(&self) -> Result<(), Error> {
+    async fn delete_processed_documents(&self, current_offset: Option<&str>) -> Result<(), Error> {
         let collection = self.get_collection()?;
         let tracking_field = self.config.tracking_field.as_deref().unwrap_or("_id");
 
-        // Get the offset from the state
-        let state = self.state.lock().await;
-        let last_offset = state.tracking_offsets.get(&self.config.collection).cloned();
-        drop(state);
-
-        if let Some(ref offset) = last_offset {
+        if let Some(offset) = current_offset {
             // Build filter using shared logic (includes query_filter if configured)
             let delete_filter = self.build_base_filter(Some(offset), tracking_field)?;
 
@@ -620,16 +618,15 @@ impl MongoDbSource {
         Ok(())
     }
 
-    async fn mark_documents_processed(&self, processed_field: &str) -> Result<(), Error> {
+    async fn mark_documents_processed(
+        &self,
+        processed_field: &str,
+        current_offset: Option<&str>,
+    ) -> Result<(), Error> {
         let collection = self.get_collection()?;
         let tracking_field = self.config.tracking_field.as_deref().unwrap_or("_id");
 
-        // Get the offset from the state
-        let state = self.state.lock().await;
-        let last_offset = state.tracking_offsets.get(&self.config.collection).cloned();
-        drop(state);
-
-        if let Some(ref offset) = last_offset {
+        if let Some(offset) = current_offset {
             // Build filter using shared logic (includes query_filter if configured)
             let update_filter = self.build_base_filter(Some(offset), tracking_field)?;
             let update = doc! {"$set": {processed_field: true}};
