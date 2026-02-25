@@ -80,13 +80,25 @@ impl MongoDbSourceFixture {
 
     /// Count documents where is_processed field is true.
     pub async fn count_processed_documents(&self, client: &Client) -> Result<u64, TestBinaryError> {
+        self.count_documents_by_field(client, "is_processed", true)
+            .await
+    }
+
+    /// Count documents where a specific field equals a value.
+    pub async fn count_documents_by_field<T: Into<mongodb::bson::Bson>>(
+        &self,
+        client: &Client,
+        field: &str,
+        value: T,
+    ) -> Result<u64, TestBinaryError> {
         let db = client.database(DEFAULT_TEST_DATABASE);
         let collection = db.collection::<Document>(SOURCE_COLLECTION);
+        let filter = mongodb::bson::doc! { field: value };
         collection
-            .count_documents(mongodb::bson::doc! { "is_processed": true })
+            .count_documents(filter)
             .await
             .map_err(|e| TestBinaryError::InvalidState {
-                message: format!("Failed to count processed documents: {e}"),
+                message: format!("Failed to count documents by field '{field}': {e}"),
             })
     }
 }

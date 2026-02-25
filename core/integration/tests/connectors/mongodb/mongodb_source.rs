@@ -712,9 +712,24 @@ async fn source_mark_processed_with_object_id(
         "All 6 documents should still exist with mark-processed mode"
     );
 
-    // Note: We can't easily count "processed=true" documents because the fixture's
-    // count_processed_documents uses "is_processed" field, but our fixture uses "processed"
-    // The key verification is that documents weren't deleted and second batch was polled correctly
+    // === PHASE 3: Verify ALL documents marked processed=true ===
+    // Wait for mark to complete on all 6 documents
+    let mut processed_count = 0u64;
+    for _ in 0..POLL_ATTEMPTS {
+        processed_count = fixture
+            .count_documents_by_field(&mongo_client, "processed", true)
+            .await
+            .unwrap_or(0);
+        if processed_count >= 6 {
+            break;
+        }
+        sleep(Duration::from_millis(POLL_INTERVAL_MS)).await;
+    }
+
+    assert_eq!(
+        processed_count, 6,
+        "Expected all 6 documents to have processed=true, got {processed_count}"
+    );
 
     mongo_client.shutdown().await;
 }
