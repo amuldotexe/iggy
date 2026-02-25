@@ -455,11 +455,12 @@ impl MongoDbSource {
         // Delete or mark documents FIRST (before checkpointing)
         // This ensures we don't checkpoint an offset if mark/delete fails
         // Pass max_offset directly to avoid reading stale offset from state
+        let batch_size = messages.len() as u64;
         if self.config.delete_after_read.unwrap_or(false) {
-            self.delete_processed_documents(max_offset.as_deref())
+            self.delete_processed_documents(max_offset.as_deref(), batch_size)
                 .await?;
         } else if let Some(processed_field) = &self.config.processed_field {
-            self.mark_documents_processed(processed_field, max_offset.as_deref())
+            self.mark_documents_processed(processed_field, max_offset.as_deref(), batch_size)
                 .await?;
         }
 
@@ -590,7 +591,11 @@ impl MongoDbSource {
         Ok(filter)
     }
 
-    async fn delete_processed_documents(&self, current_offset: Option<&str>) -> Result<(), Error> {
+    async fn delete_processed_documents(
+        &self,
+        current_offset: Option<&str>,
+        expected_count: u64,
+    ) -> Result<(), Error> {
         let collection = self.get_collection()?;
         let tracking_field = self.config.tracking_field.as_deref().unwrap_or("_id");
 
@@ -602,10 +607,12 @@ impl MongoDbSource {
                 Error::Storage(format!("Failed to delete processed documents: {e}"))
             })?;
 
-            if result.deleted_count == 0 {
+            // Only warn if we expected deletions but got none (possible data issue)
+            if expected_count > 0 && result.deleted_count == 0 {
                 tracing::warn!(
                     collection = %self.config.collection,
-                    "delete_processed_documents: no documents deleted (filter may not match any documents)"
+                    expected = expected_count,
+                    "delete_processed_documents: expected deletions but got 0 (filter may not match)"
                 );
             } else {
                 debug!(
@@ -622,6 +629,7 @@ impl MongoDbSource {
         &self,
         processed_field: &str,
         current_offset: Option<&str>,
+        expected_count: u64,
     ) -> Result<(), Error> {
         let collection = self.get_collection()?;
         let tracking_field = self.config.tracking_field.as_deref().unwrap_or("_id");
@@ -638,11 +646,13 @@ impl MongoDbSource {
                     Error::Storage(format!("Failed to mark documents as processed: {e}"))
                 })?;
 
-            if result.matched_count == 0 {
+            // Only warn if we expected updates but got none (possible data issue)
+            if expected_count > 0 && result.matched_count == 0 {
                 tracing::warn!(
                     collection = %self.config.collection,
                     processed_field = %processed_field,
-                    "mark_documents_processed: no documents matched (filter may not match any documents)"
+                    expected = expected_count,
+                    "mark_documents_processed: expected matches but got 0 (filter may not match)"
                 );
             } else {
                 debug!(

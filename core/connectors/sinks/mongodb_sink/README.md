@@ -136,8 +136,8 @@ This connector provides **at-least-once** delivery semantics.
 
 ### Behavior
 - Messages may be delivered more than once on retry or restart
-- Uses Iggy message ID as MongoDB `_id` for deduplication
-- **Insert-only**: duplicate key after retry causes hard failure (not upsert)
+- Uses Iggy message ID as MongoDB `_id` for document identity
+- **Insert-only mode**: duplicate key error is a hard failure (not upsert)
 
 ### Known Limitations
 - On network timeout during insert, retry may cause duplicate key error
