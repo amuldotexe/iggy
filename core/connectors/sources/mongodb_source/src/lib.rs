@@ -94,6 +94,31 @@ fn to_snake_case(s: &str) -> String {
     result
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ExpectedActualCountMismatch {
+    None,
+    Partial { expected: u64, actual: u64 },
+    Complete { expected: u64 },
+}
+
+fn classify_expected_actual_mismatch(
+    expected_count: u64,
+    actual_count: u64,
+) -> ExpectedActualCountMismatch {
+    if expected_count == 0 || actual_count >= expected_count {
+        ExpectedActualCountMismatch::None
+    } else if actual_count == 0 {
+        ExpectedActualCountMismatch::Complete {
+            expected: expected_count,
+        }
+    } else {
+        ExpectedActualCountMismatch::Partial {
+            expected: expected_count,
+            actual: actual_count,
+        }
+    }
+}
+
 /// Converts an offset string to the appropriate BSON type for query comparison.
 ///
 /// # Arguments
@@ -607,18 +632,31 @@ impl MongoDbSource {
                 Error::Storage(format!("Failed to delete processed documents: {e}"))
             })?;
 
-            // Only warn if we expected deletions but got none (possible data issue)
-            if expected_count > 0 && result.deleted_count == 0 {
-                tracing::warn!(
-                    collection = %self.config.collection,
-                    expected = expected_count,
-                    "delete_processed_documents: expected deletions but got 0 (filter may not match)"
-                );
-            } else {
-                debug!(
-                    "Deleted {} processed documents up to offset: {}",
-                    result.deleted_count, offset
-                );
+            match classify_expected_actual_mismatch(expected_count, result.deleted_count) {
+                ExpectedActualCountMismatch::None => {
+                    debug!(
+                        "Deleted {} processed documents up to offset: {}",
+                        result.deleted_count, offset
+                    );
+                }
+                ExpectedActualCountMismatch::Partial { expected, actual } => {
+                    tracing::warn!(
+                        collection = %self.config.collection,
+                        expected,
+                        actual,
+                        offset = %offset,
+                        "delete_processed_documents: partial mismatch (deleted fewer documents than expected)"
+                    );
+                }
+                ExpectedActualCountMismatch::Complete { expected } => {
+                    tracing::warn!(
+                        collection = %self.config.collection,
+                        expected,
+                        actual = result.deleted_count,
+                        offset = %offset,
+                        "delete_processed_documents: complete mismatch (expected deletions but got 0)"
+                    );
+                }
             }
         }
 
@@ -646,19 +684,33 @@ impl MongoDbSource {
                     Error::Storage(format!("Failed to mark documents as processed: {e}"))
                 })?;
 
-            // Only warn if we expected updates but got none (possible data issue)
-            if expected_count > 0 && result.matched_count == 0 {
-                tracing::warn!(
-                    collection = %self.config.collection,
-                    processed_field = %processed_field,
-                    expected = expected_count,
-                    "mark_documents_processed: expected matches but got 0 (filter may not match)"
-                );
-            } else {
-                debug!(
-                    "Marked {} documents as processed up to offset: {}",
-                    result.matched_count, offset
-                );
+            match classify_expected_actual_mismatch(expected_count, result.matched_count) {
+                ExpectedActualCountMismatch::None => {
+                    debug!(
+                        "Marked {} documents as processed up to offset: {}",
+                        result.matched_count, offset
+                    );
+                }
+                ExpectedActualCountMismatch::Partial { expected, actual } => {
+                    tracing::warn!(
+                        collection = %self.config.collection,
+                        processed_field = %processed_field,
+                        expected,
+                        actual,
+                        offset = %offset,
+                        "mark_documents_processed: partial mismatch (matched fewer documents than expected)"
+                    );
+                }
+                ExpectedActualCountMismatch::Complete { expected } => {
+                    tracing::warn!(
+                        collection = %self.config.collection,
+                        processed_field = %processed_field,
+                        expected,
+                        actual = result.matched_count,
+                        offset = %offset,
+                        "mark_documents_processed: complete mismatch (expected matches but got 0)"
+                    );
+                }
             }
         }
 
@@ -928,6 +980,47 @@ mod tests {
     #[test]
     fn given_connection_error_message_should_be_transient() {
         assert!(is_transient_error("connection refused"));
+    }
+
+    // ---- classify_expected_actual_mismatch tests ----
+
+    #[test]
+    fn given_zero_expected_should_have_no_mismatch() {
+        let result = classify_expected_actual_mismatch(0, 0);
+        assert_eq!(result, ExpectedActualCountMismatch::None);
+    }
+
+    #[test]
+    fn given_actual_at_least_expected_should_have_no_mismatch() {
+        assert_eq!(
+            classify_expected_actual_mismatch(5, 5),
+            ExpectedActualCountMismatch::None
+        );
+        assert_eq!(
+            classify_expected_actual_mismatch(5, 6),
+            ExpectedActualCountMismatch::None
+        );
+    }
+
+    #[test]
+    fn given_zero_actual_with_expected_should_have_complete_mismatch() {
+        let result = classify_expected_actual_mismatch(3, 0);
+        assert_eq!(
+            result,
+            ExpectedActualCountMismatch::Complete { expected: 3 }
+        );
+    }
+
+    #[test]
+    fn given_partial_actual_with_expected_should_have_partial_mismatch() {
+        let result = classify_expected_actual_mismatch(7, 4);
+        assert_eq!(
+            result,
+            ExpectedActualCountMismatch::Partial {
+                expected: 7,
+                actual: 4
+            }
+        );
     }
 
     #[test]
