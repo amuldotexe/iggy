@@ -137,3 +137,16 @@ All 11 E2E tests (4 sink + 7 source) in one command:
 ```bash
 cargo test --test mod -- mongodb
 ```
+
+## Delivery Semantics
+
+This connector provides **at-least-once** delivery semantics.
+
+### Behavior
+- Messages may be delivered more than once on retry or restart
+- Checkpoint advances only after successful mark/delete
+- If mark/delete fails, the same documents will be re-polled
+
+### Known Limitations
+- Custom ObjectId fields (not named `_id`) use string comparison
+- Documents that fail to mark/delete may be orphaned on failure

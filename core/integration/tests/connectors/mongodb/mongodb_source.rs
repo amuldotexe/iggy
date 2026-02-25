@@ -731,5 +731,15 @@ async fn source_mark_processed_with_object_id(
         "Expected all 6 documents to have processed=true, got {processed_count}"
     );
 
+    // Verify no documents have processed=false
+    let unprocessed = fixture
+        .count_documents_by_field(&mongo_client, "processed", false)
+        .await
+        .expect("count failed");
+    assert_eq!(
+        unprocessed, 0,
+        "No documents should have processed=false after mark_documents_processed"
+    );
+
     mongo_client.shutdown().await;
 }

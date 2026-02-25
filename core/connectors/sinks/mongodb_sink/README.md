@@ -129,3 +129,16 @@ Unit tests (no Docker):
 ```bash
 cargo test -p iggy_connector_mongodb_sink
 ```
+
+## Delivery Semantics
+
+This connector provides **at-least-once** delivery semantics.
+
+### Behavior
+- Messages may be delivered more than once on retry or restart
+- Uses Iggy message ID as MongoDB `_id` for deduplication
+- **Insert-only**: duplicate key after retry causes hard failure (not upsert)
+
+### Known Limitations
+- On network timeout during insert, retry may cause duplicate key error
+- Sink does not upsert on duplicate (future improvement)

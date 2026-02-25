@@ -452,20 +452,21 @@ impl MongoDbSource {
             messages.push(message);
         }
 
-        // Update state with new offset
+        // Delete or mark documents FIRST (before checkpointing)
+        // This ensures we don't checkpoint an offset if mark/delete fails
+        if self.config.delete_after_read.unwrap_or(false) {
+            self.delete_processed_documents().await?;
+        } else if let Some(processed_field) = &self.config.processed_field {
+            self.mark_documents_processed(processed_field).await?;
+        }
+
+        // THEN update state with new offset (only after successful mark/delete)
         if let Some(offset) = max_offset {
             let mut state = self.state.lock().await;
             state
                 .tracking_offsets
                 .insert(self.config.collection.clone(), offset);
             state.processed_documents += messages.len() as u64;
-        }
-
-        // Delete documents if configured
-        if self.config.delete_after_read.unwrap_or(false) {
-            self.delete_processed_documents().await?;
-        } else if let Some(processed_field) = &self.config.processed_field {
-            self.mark_documents_processed(processed_field).await?;
         }
 
         Ok(messages)
@@ -599,11 +600,21 @@ impl MongoDbSource {
             // Build filter using shared logic (includes query_filter if configured)
             let delete_filter = self.build_base_filter(Some(offset), tracking_field)?;
 
-            collection.delete_many(delete_filter).await.map_err(|e| {
+            let result = collection.delete_many(delete_filter).await.map_err(|e| {
                 Error::Storage(format!("Failed to delete processed documents: {e}"))
             })?;
 
-            debug!("Deleted processed documents up to offset: {}", offset);
+            if result.deleted_count == 0 {
+                tracing::warn!(
+                    collection = %self.config.collection,
+                    "delete_processed_documents: no documents deleted (filter may not match any documents)"
+                );
+            } else {
+                debug!(
+                    "Deleted {} processed documents up to offset: {}",
+                    result.deleted_count, offset
+                );
+            }
         }
 
         Ok(())
@@ -623,14 +634,25 @@ impl MongoDbSource {
             let update_filter = self.build_base_filter(Some(offset), tracking_field)?;
             let update = doc! {"$set": {processed_field: true}};
 
-            collection
+            let result = collection
                 .update_many(update_filter, update)
                 .await
                 .map_err(|e| {
                     Error::Storage(format!("Failed to mark documents as processed: {e}"))
                 })?;
 
-            debug!("Marked documents as processed up to offset: {}", offset);
+            if result.matched_count == 0 {
+                tracing::warn!(
+                    collection = %self.config.collection,
+                    processed_field = %processed_field,
+                    "mark_documents_processed: no documents matched (filter may not match any documents)"
+                );
+            } else {
+                debug!(
+                    "Marked {} documents as processed up to offset: {}",
+                    result.matched_count, offset
+                );
+            }
         }
 
         Ok(())
