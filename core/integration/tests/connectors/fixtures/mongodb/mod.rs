@@ -17,24 +17,12 @@
  * under the License.
  */
 
-mod elasticsearch;
-mod iceberg;
-mod mongodb;
-mod postgres;
-mod quickwit;
-mod wiremock;
+mod container;
+mod source;
 
-pub use elasticsearch::{ElasticsearchSinkFixture, ElasticsearchSourcePreCreatedFixture};
-pub use iceberg::{DEFAULT_NAMESPACE, DEFAULT_TABLE, IcebergOps, IcebergPreCreatedFixture};
-pub use mongodb::{
-    MongoDbOps, MongoDbSourceDeleteFixture, MongoDbSourceFixture, MongoDbSourceMarkFixture,
+pub use container::MongoDbOps;
+pub use source::{
+    MongoDbSourceDeleteFixture, MongoDbSourceFixture, MongoDbSourceMarkFixture,
     MongoDbSourceObjectIdDeleteFixture, MongoDbSourceObjectIdFixture,
     MongoDbSourceObjectIdMarkFixture,
 };
-pub use postgres::{
-    PostgresOps, PostgresSinkByteaFixture, PostgresSinkFixture, PostgresSinkJsonFixture,
-    PostgresSourceByteaFixture, PostgresSourceDeleteFixture, PostgresSourceJsonFixture,
-    PostgresSourceJsonbFixture, PostgresSourceMarkFixture, PostgresSourceOps,
-};
-pub use quickwit::{QuickwitFixture, QuickwitOps, QuickwitPreCreatedFixture};
-pub use wiremock::{WireMockDirectFixture, WireMockWrappedFixture};
