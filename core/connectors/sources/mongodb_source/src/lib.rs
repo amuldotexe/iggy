@@ -149,6 +149,75 @@ fn convert_offset_value_to_bson(offset: &str, tracking_field: &str) -> Bson {
     Bson::String(offset.to_string())
 }
 
+fn extract_tracking_offset_from_document(
+    document: &Document,
+    tracking_field: &str,
+) -> Result<String, Error> {
+    let bson_value = document.get(tracking_field).ok_or(Error::InvalidRecord)?;
+    let offset = match bson_value {
+        Bson::Int32(v) => v.to_string(),
+        Bson::Int64(v) => v.to_string(),
+        Bson::Double(v) => v.to_string(),
+        Bson::String(s) => s.clone(),
+        Bson::ObjectId(oid) => oid.to_hex(),
+        _ => return Err(Error::InvalidRecord),
+    };
+
+    Ok(offset)
+}
+
+fn find_previous_distinct_offset(batch_offsets: &[String]) -> Option<String> {
+    let last_offset = batch_offsets.last()?;
+    batch_offsets
+        .iter()
+        .rev()
+        .skip(1)
+        .find(|offset| *offset != last_offset)
+        .cloned()
+}
+
+fn resolve_checkpoint_offset_for_batch(
+    batch_offsets: &[String],
+    extra_offset: Option<&str>,
+    tracking_field: &str,
+) -> Option<String> {
+    let max_offset = batch_offsets.last().cloned();
+
+    if tracking_field == "_id" {
+        return max_offset;
+    }
+
+    let batch_max_offset = max_offset.as_deref()?;
+    let Some(extra_offset) = extra_offset else {
+        return max_offset;
+    };
+
+    if extra_offset != batch_max_offset {
+        return max_offset;
+    }
+
+    find_previous_distinct_offset(batch_offsets)
+}
+
+fn apply_checkpoint_after_side_effect(
+    state: &mut State,
+    collection: &str,
+    checkpoint_offset: Option<String>,
+    processed_count: u64,
+    side_effect_result: Result<(), Error>,
+) -> Result<(), Error> {
+    side_effect_result?;
+
+    if let Some(offset) = checkpoint_offset {
+        state
+            .tracking_offsets
+            .insert(collection.to_string(), offset);
+        state.processed_documents += processed_count;
+    }
+
+    Ok(())
+}
+
 #[derive(Debug)]
 pub struct MongoDbSource {
     pub id: u32,
@@ -432,9 +501,9 @@ impl MongoDbSource {
         };
 
         // Build find options
-        let batch_size = self.config.batch_size.unwrap_or(DEFAULT_BATCH_SIZE);
+        let configured_batch_size = self.config.batch_size.unwrap_or(DEFAULT_BATCH_SIZE);
         let mut find_options = FindOptions::default();
-        find_options.limit = Some(batch_size as i64);
+        find_options.limit = Some(configured_batch_size.saturating_add(1) as i64);
         find_options.sort = Some(doc! {tracking_field: 1});
         if let Some(proj) = projection {
             find_options.projection = Some(proj);
@@ -447,56 +516,81 @@ impl MongoDbSource {
             .await
             .map_err(|e| Error::Storage(format!("Failed to query collection: {e}")))?;
 
-        let documents = cursor
+        let mut documents = cursor
             .try_collect::<Vec<_>>()
             .await
             .map_err(|e| Error::Storage(format!("Failed to fetch documents: {e}")))?;
 
+        let configured_batch_size = configured_batch_size as usize;
+        let extra_document = if documents.len() > configured_batch_size {
+            documents.pop()
+        } else {
+            None
+        };
+
         // Convert documents to messages
         let mut messages = Vec::with_capacity(documents.len());
-        let mut max_offset: Option<String> = None;
+        let mut batch_offsets = Vec::with_capacity(documents.len());
 
         for doc in documents {
-            // Extract tracking field value for offset
-            if let Some(bson_value) = doc.get(tracking_field) {
-                let offset_value = match bson_value {
-                    Bson::Int32(v) => Some(v.to_string()),
-                    Bson::Int64(v) => Some(v.to_string()),
-                    Bson::Double(v) => Some(v.to_string()),
-                    Bson::String(s) => Some(s.clone()),
-                    Bson::ObjectId(oid) => Some(oid.to_hex()),
-                    _ => None,
-                };
-
-                if let Some(offset) = offset_value {
-                    max_offset = Some(offset);
-                }
-            }
+            let offset = extract_tracking_offset_from_document(&doc, tracking_field)?;
+            batch_offsets.push(offset);
 
             let message = self.document_to_message(doc, tracking_field).await?;
             messages.push(message);
         }
 
-        // Delete or mark documents FIRST (before checkpointing)
-        // This ensures we don't checkpoint an offset if mark/delete fails
-        // Pass max_offset directly to avoid reading stale offset from state
-        let batch_size = messages.len() as u64;
-        if self.config.delete_after_read.unwrap_or(false) {
-            self.delete_processed_documents(max_offset.as_deref(), batch_size)
-                .await?;
-        } else if let Some(processed_field) = &self.config.processed_field {
-            self.mark_documents_processed(processed_field, max_offset.as_deref(), batch_size)
-                .await?;
+        let extra_offset = extra_document
+            .as_ref()
+            .map(|doc| extract_tracking_offset_from_document(doc, tracking_field))
+            .transpose()?;
+        let max_offset = batch_offsets.last().cloned();
+        let checkpoint_offset = resolve_checkpoint_offset_for_batch(
+            &batch_offsets,
+            extra_offset.as_deref(),
+            tracking_field,
+        );
+
+        if tracking_field != "_id"
+            && let (Some(boundary_offset), Some(extra_offset)) =
+                (max_offset.as_deref(), extra_offset.as_deref())
+            && extra_offset == boundary_offset
+        {
+            warn!(
+                collection = %self.config.collection,
+                tracking_field = %tracking_field,
+                boundary_offset = %boundary_offset,
+                "Detected duplicate tracking value at batch boundary; rolling checkpoint back to avoid skipping equal offsets"
+            );
         }
 
+        // Delete or mark documents FIRST (before checkpointing)
+        // This ensures we don't checkpoint an offset if mark/delete fails
+        // Pass checkpoint_offset directly to avoid reading stale offset from state
+        let expected_count = messages.len() as u64;
+        let side_effect_result = if self.config.delete_after_read.unwrap_or(false) {
+            self.delete_processed_documents(checkpoint_offset.as_deref(), expected_count)
+                .await
+        } else if let Some(processed_field) = &self.config.processed_field {
+            self.mark_documents_processed(
+                processed_field,
+                checkpoint_offset.as_deref(),
+                expected_count,
+            )
+            .await
+        } else {
+            Ok(())
+        };
+
         // THEN update state with new offset (only after successful mark/delete)
-        if let Some(offset) = max_offset {
-            let mut state = self.state.lock().await;
-            state
-                .tracking_offsets
-                .insert(self.config.collection.clone(), offset);
-            state.processed_documents += messages.len() as u64;
-        }
+        let mut state = self.state.lock().await;
+        apply_checkpoint_after_side_effect(
+            &mut state,
+            &self.config.collection,
+            checkpoint_offset,
+            expected_count,
+            side_effect_result,
+        )?;
 
         Ok(messages)
     }
@@ -1111,6 +1205,76 @@ mod tests {
             matches!(result, Bson::String(_)),
             "Expected String when tracking_field is not _id, got {:?}",
             result
+        );
+    }
+
+    #[test]
+    fn query_filter_scopes_mark_delete_side_effects() {
+        let mut config = given_default_config();
+        config.query_filter = Some(r#"{"tenant":"alpha","kind":"event"}"#.to_string());
+        let source = MongoDbSource::new(1, config, None);
+
+        let filter = source
+            .build_base_filter(Some("42"), "seq")
+            .expect("filter should build");
+
+        let seq = filter
+            .get_document("seq")
+            .expect("seq filter should be present");
+        assert_eq!(seq.get("$lte"), Some(&Bson::Int64(42)));
+        assert_eq!(
+            filter.get("tenant"),
+            Some(&Bson::String("alpha".to_string()))
+        );
+        assert_eq!(filter.get("kind"), Some(&Bson::String("event".to_string())));
+    }
+
+    #[test]
+    fn projection_missing_tracking_field_fails_fast() {
+        let doc = doc! {"name": "event_1"};
+        let result = extract_tracking_offset_from_document(&doc, "seq");
+        assert!(
+            matches!(result, Err(Error::InvalidRecord)),
+            "Expected InvalidRecord when tracking field is missing"
+        );
+    }
+
+    #[test]
+    fn non_unique_tracking_field_does_not_skip_equal_offsets() {
+        let batch_offsets = vec!["1".to_string(), "2".to_string()];
+        let checkpoint = resolve_checkpoint_offset_for_batch(&batch_offsets, Some("2"), "seq");
+        assert_eq!(
+            checkpoint,
+            Some("1".to_string()),
+            "Checkpoint should roll back to previous distinct offset at duplicate boundary"
+        );
+    }
+
+    #[test]
+    fn mark_or_delete_failure_does_not_advance_checkpoint() {
+        let mut state = State {
+            last_poll_time: Utc::now(),
+            tracking_offsets: HashMap::from([("test_collection".to_string(), "10".to_string())]),
+            processed_documents: 5,
+        };
+
+        let result = apply_checkpoint_after_side_effect(
+            &mut state,
+            "test_collection",
+            Some("11".to_string()),
+            3,
+            Err(Error::Storage("forced failure".to_string())),
+        );
+
+        assert!(result.is_err(), "Expected mark/delete failure to propagate");
+        assert_eq!(
+            state.tracking_offsets.get("test_collection"),
+            Some(&"10".to_string()),
+            "Checkpoint must not advance on failure"
+        );
+        assert_eq!(
+            state.processed_documents, 5,
+            "Processed count must not advance on failure"
         );
     }
 }
