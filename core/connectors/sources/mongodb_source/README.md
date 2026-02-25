@@ -116,12 +116,15 @@ Requires Docker. Testcontainers starts MongoDB 7 + iggy-server automatically.
 cargo test --test mod -- mongodb_source
 ```
 
-This runs 4 E2E tests against a real MongoDB instance:
+This runs 7 E2E tests against a real MongoDB instance:
 
 - `source_polls_documents_to_iggy` — documents polled and delivered as Iggy messages
 - `delete_after_read_removes_documents` — processed documents deleted from collection
 - `mark_processed_sets_field` — processed documents marked with boolean field
 - `state_persists_across_connector_restart` — offset survives connector restart
+- `source_polls_documents_by_object_id` — ObjectId `_id` tracking (default)
+- `source_delete_after_read_with_object_id` — delete mode with ObjectId tracking
+- `source_mark_processed_with_object_id` — mark mode with ObjectId tracking
 
 Unit tests (no Docker):
 
@@ -129,7 +132,7 @@ Unit tests (no Docker):
 cargo test -p iggy_connector_mongodb_source
 ```
 
-All 8 E2E tests (sink + source) in one command:
+All 11 E2E tests (4 sink + 7 source) in one command:
 
 ```bash
 cargo test --test mod -- mongodb
