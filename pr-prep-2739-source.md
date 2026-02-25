@@ -38,6 +38,56 @@ For this PR:
 
 ---
 
+## Shreyas-Doshi-Level PR Additions (Source)
+
+Add the following explicitly to the PR body (or first maintainer comment). This is the "no ambiguity" layer for source correctness changes.
+
+### 1) Decision Memo (3 lines, top of PR)
+
+- **Problem:** Source connectors are high-risk when state/checkpoint order is wrong.
+- **Decision:** Execute mark/delete before checkpoint update, and pass batch `max_offset` directly into mark/delete.
+- **Tradeoff:** At-least-once semantics remain; correctness and observability are prioritized over pretending exactly-once.
+
+### 2) Non-Negotiable Invariants (call these out verbatim)
+
+- Checkpoint state advances only after successful mark/delete.
+  - Evidence: `core/connectors/sources/mongodb_source/src/lib.rs:480-493`.
+- Mark/delete use current batch `max_offset` (not stale persisted offset).
+  - Evidence: `src/lib.rs:457`, `:482`, `:485`, `:488`.
+- Offset conversion to `ObjectId` is only for `_id`; custom fields stay string/numeric.
+  - Evidence: `src/lib.rs:132`, `:140`, tests at `:1109`.
+- Expected-vs-actual mismatch telemetry warns on both complete and partial mismatches.
+  - Evidence: `src/lib.rs:104`, `:635`, `:648`, `:657`, `:687`, `:701`, `:711`.
+
+### 3) Failure-Mode Table (include in PR text)
+
+| Scenario | Expected behavior | Evidence |
+| --- | --- | --- |
+| Mark/delete fails | Poll returns error; offset not checkpointed | `src/lib.rs:480-493` |
+| `actual == 0` but `expected > 0` | Complete mismatch warning emitted | `src/lib.rs:657`, `:711` |
+| `0 < actual < expected` | Partial mismatch warning emitted | `src/lib.rs:648`, `:701` |
+| `_id` ObjectId state resume | `$gt/$lte` uses ObjectId-compatible filter | integration tests in `mongodb_source.rs` at `source_polls_documents_by_object_id`, `source_delete_after_read_with_object_id`, `source_mark_processed_with_object_id` |
+
+### 4) Reviewer Fast-Path (save maintainer time)
+
+- Core polling/state transition logic: `core/connectors/sources/mongodb_source/src/lib.rs`.
+- ObjectId and restart regressions: `core/integration/tests/connectors/mongodb/mongodb_source.rs`.
+- Semantics/limitations statement: `core/connectors/sources/mongodb_source/README.md` ("Delivery Semantics").
+
+### 5) Pre-answer Maintainer Questions
+
+- **Why warn (not fail) on partial mismatch?** To preserve forward progress while surfacing data-plane anomalies in logs.
+- **How do we avoid stale-offset bugs?** Mark/delete receives explicit batch `max_offset`, then state mutates only after success.
+- **Could ObjectId conversion corrupt custom trackers?** No; conversion gate is strict to `_id`.
+- **Do tests cover both sides of mark semantics?** Yes; we assert `processed=true` counts and `processed=false == 0`.
+
+### 6) Commit Traceability (from branch log)
+
+- `3aa3c180` - feature implementation + integration coverage (source).
+- `e0a0d274` - PR prep/checklist documentation.
+
+---
+
 ## Scope Contract (Source PR)
 
 Include:
