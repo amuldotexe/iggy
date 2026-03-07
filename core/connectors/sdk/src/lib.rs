@@ -105,6 +105,18 @@ pub trait Source: Send + Sync {
     /// Invoked every time a batch of messages is produced to the configured stream and topic.
     async fn poll(&self) -> Result<ProducedMessages, Error>;
 
+    /// Invoked after the runtime has successfully delivered the polled batch.
+    /// Sources may use this to promote pending state and run post-send side effects.
+    async fn commit_polled_messages_now(&self) -> Result<Option<ConnectorState>, Error> {
+        Ok(None)
+    }
+
+    /// Invoked when the runtime could not deliver the polled batch.
+    /// Sources may use this to discard pending state and retry the same batch later.
+    async fn discard_polled_messages_now(&self) -> Result<(), Error> {
+        Ok(())
+    }
+
     /// Invoked when the source is closed, allowing it to perform any necessary cleanup.
     async fn close(&mut self) -> Result<(), Error>;
 }

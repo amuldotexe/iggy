@@ -145,10 +145,11 @@ This connector provides **at-least-once** delivery semantics.
 ### Behavior
 
 - Messages may be delivered more than once on retry or restart
-- Checkpoint advances only after successful mark/delete
-- If mark/delete fails, the same documents will be re-polled
+- The source stages each polled batch and only commits progress after the runtime successfully sends the batch to Iggy
+- Checkpoint persistence and `delete_after_read` / `processed_field` side effects run in the post-send commit path
+- If the downstream send or post-send mark/delete fails, the same documents will be re-polled and may be delivered again
 
 ### Known Limitations
 
 - Custom ObjectId fields (not named `_id`) use string comparison
-- Documents that fail to mark/delete may be orphaned on failure
+- Non-unique tracking fields can stall progress at batch boundaries; use a unique tracking field or lower `batch_size`

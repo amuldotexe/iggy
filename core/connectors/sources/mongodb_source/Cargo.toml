@@ -29,7 +29,7 @@ repository = "https://github.com/apache/iggy"
 readme = "../../README.md"
 
 [package.metadata.cargo-machete]
-ignored = ["dashmap", "once_cell", "futures", "simd-json"]
+ignored = ["dashmap", "once_cell", "futures"]
 
 [lib]
 crate-type = ["cdylib", "lib"]
@@ -45,7 +45,6 @@ mongodb = { version = "3.0", features = ["rustls-tls"] }
 once_cell = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-simd-json = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
 uuid = { workspace = true }

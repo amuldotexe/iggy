@@ -149,24 +149,126 @@ fn convert_offset_value_to_bson(offset: &str, tracking_field: &str) -> Bson {
     Bson::String(offset.to_string())
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "value", rename_all = "snake_case")]
+enum TrackingOffsetValue {
+    Int64(i64),
+    Double(f64),
+    String(String),
+    ObjectIdHex(String),
+    DateTimeMillis(i64),
+}
+
+impl TrackingOffsetValue {
+    fn from_bson_value_now(value: &Bson) -> Result<Self, Error> {
+        match value {
+            Bson::Int32(v) => Ok(Self::Int64((*v).into())),
+            Bson::Int64(v) => Ok(Self::Int64(*v)),
+            Bson::Double(v) => Ok(Self::Double(*v)),
+            Bson::String(value) => Ok(Self::String(value.clone())),
+            Bson::ObjectId(object_id) => Ok(Self::ObjectIdHex(object_id.to_hex())),
+            Bson::DateTime(value) => Ok(Self::DateTimeMillis(value.timestamp_millis())),
+            _ => Err(Error::InvalidRecord),
+        }
+    }
+
+    fn to_query_bson_now(&self) -> Bson {
+        match self {
+            Self::Int64(value) => Bson::Int64(*value),
+            Self::Double(value) => Bson::Double(*value),
+            Self::String(value) => Bson::String(value.clone()),
+            Self::ObjectIdHex(value) => ObjectId::parse_str(value)
+                .map(Bson::ObjectId)
+                .unwrap_or_else(|_| Bson::String(value.clone())),
+            Self::DateTimeMillis(value) => {
+                Bson::DateTime(mongodb::bson::DateTime::from_millis(*value))
+            }
+        }
+    }
+
+    fn display_offset_value_now(&self) -> String {
+        match self {
+            Self::Int64(value) => value.to_string(),
+            Self::Double(value) => value.to_string(),
+            Self::String(value) => value.clone(),
+            Self::ObjectIdHex(value) => value.clone(),
+            Self::DateTimeMillis(value) => value.to_string(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+enum PersistedTrackingOffset {
+    Typed(TrackingOffsetValue),
+    LegacyString(String),
+}
+
+impl PersistedTrackingOffset {
+    fn from_bson_value_now(value: &Bson) -> Result<Self, Error> {
+        Ok(Self::Typed(TrackingOffsetValue::from_bson_value_now(
+            value,
+        )?))
+    }
+
+    fn to_query_bson_now(&self, tracking_field: &str) -> Bson {
+        match self {
+            Self::Typed(value) => value.to_query_bson_now(),
+            Self::LegacyString(value) => convert_offset_value_to_bson(value, tracking_field),
+        }
+    }
+
+    fn display_offset_value_now(&self) -> String {
+        match self {
+            Self::Typed(value) => value.display_offset_value_now(),
+            Self::LegacyString(value) => value.clone(),
+        }
+    }
+}
+
+impl Serialize for PersistedTrackingOffset {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            Self::Typed(value) => value.serialize(serializer),
+            Self::LegacyString(value) => value.serialize(serializer),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for PersistedTrackingOffset {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        #[derive(Deserialize)]
+        #[serde(untagged)]
+        enum PersistedTrackingOffsetWire {
+            Typed(TrackingOffsetValue),
+            LegacyString(String),
+        }
+
+        Ok(
+            match PersistedTrackingOffsetWire::deserialize(deserializer)? {
+                PersistedTrackingOffsetWire::Typed(value) => Self::Typed(value),
+                PersistedTrackingOffsetWire::LegacyString(value) => Self::LegacyString(value),
+            },
+        )
+    }
+}
+
 fn extract_tracking_offset_from_document(
     document: &Document,
     tracking_field: &str,
-) -> Result<String, Error> {
+) -> Result<PersistedTrackingOffset, Error> {
     let bson_value = document.get(tracking_field).ok_or(Error::InvalidRecord)?;
-    let offset = match bson_value {
-        Bson::Int32(v) => v.to_string(),
-        Bson::Int64(v) => v.to_string(),
-        Bson::Double(v) => v.to_string(),
-        Bson::String(s) => s.clone(),
-        Bson::ObjectId(oid) => oid.to_hex(),
-        _ => return Err(Error::InvalidRecord),
-    };
-
-    Ok(offset)
+    PersistedTrackingOffset::from_bson_value_now(bson_value)
 }
 
-fn find_previous_distinct_offset(batch_offsets: &[String]) -> Option<String> {
+fn find_previous_distinct_offset(
+    batch_offsets: &[PersistedTrackingOffset],
+) -> Option<PersistedTrackingOffset> {
     let last_offset = batch_offsets.last()?;
     batch_offsets
         .iter()
@@ -177,17 +279,17 @@ fn find_previous_distinct_offset(batch_offsets: &[String]) -> Option<String> {
 }
 
 fn resolve_checkpoint_offset_for_batch(
-    batch_offsets: &[String],
-    extra_offset: Option<&str>,
+    batch_offsets: &[PersistedTrackingOffset],
+    extra_offset: Option<&PersistedTrackingOffset>,
     tracking_field: &str,
-) -> Option<String> {
+) -> Option<PersistedTrackingOffset> {
     let max_offset = batch_offsets.last().cloned();
 
     if tracking_field == "_id" {
         return max_offset;
     }
 
-    let batch_max_offset = max_offset.as_deref()?;
+    let batch_max_offset = max_offset.as_ref()?;
     let Some(extra_offset) = extra_offset else {
         return max_offset;
     };
@@ -199,31 +301,12 @@ fn resolve_checkpoint_offset_for_batch(
     find_previous_distinct_offset(batch_offsets)
 }
 
-fn apply_checkpoint_after_side_effect(
-    state: &mut State,
-    collection: &str,
-    checkpoint_offset: Option<String>,
-    processed_count: u64,
-    side_effect_result: Result<(), Error>,
-) -> Result<(), Error> {
-    side_effect_result?;
-
-    if let Some(offset) = checkpoint_offset {
-        state
-            .tracking_offsets
-            .insert(collection.to_string(), offset);
-        state.processed_documents += processed_count;
-    }
-
-    Ok(())
-}
-
 #[derive(Debug)]
 pub struct MongoDbSource {
     pub id: u32,
     client: Option<Client>,
     config: MongoDbSourceConfig,
-    state: Mutex<State>,
+    state: Mutex<SourceState>,
     verbose: bool,
     retry_delay: Duration,
     poll_interval: Duration,
@@ -255,8 +338,27 @@ pub struct MongoDbSourceConfig {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct State {
     last_poll_time: DateTime<Utc>,
-    tracking_offsets: HashMap<String, String>,
+    tracking_offsets: HashMap<String, PersistedTrackingOffset>,
     processed_documents: u64,
+}
+
+#[derive(Debug, Clone)]
+struct PendingBatchState {
+    collection: String,
+    checkpoint_offset: Option<PersistedTrackingOffset>,
+    processed_count: u64,
+}
+
+#[derive(Debug)]
+struct SourceState {
+    committed_state: State,
+    pending_batch: Option<PendingBatchState>,
+}
+
+#[derive(Debug)]
+struct PreparedPollBatch {
+    messages: Vec<ProducedMessage>,
+    pending_batch: Option<PendingBatchState>,
 }
 
 impl MongoDbSource {
@@ -282,7 +384,10 @@ impl MongoDbSource {
             .unwrap_or_else(|| {
                 let mut offsets = HashMap::new();
                 if let Some(offset) = &config.initial_offset {
-                    offsets.insert(config.collection.clone(), offset.clone());
+                    offsets.insert(
+                        config.collection.clone(),
+                        PersistedTrackingOffset::LegacyString(offset.clone()),
+                    );
                 }
                 State {
                     last_poll_time: Utc::now(),
@@ -295,7 +400,10 @@ impl MongoDbSource {
             id,
             client: None,
             config,
-            state: Mutex::new(initial_state),
+            state: Mutex::new(SourceState {
+                committed_state: initial_state,
+                pending_batch: None,
+            }),
             verbose,
             retry_delay,
             poll_interval,
@@ -367,37 +475,85 @@ impl Source for MongoDbSource {
         let poll_interval = self.poll_interval;
         tokio::time::sleep(poll_interval).await;
 
-        let messages = self.poll_collection().await?;
+        let prepared_batch = self.poll_collection().await?;
 
         let mut state = self.state.lock().await;
-        state.last_poll_time = Utc::now();
+        if state.pending_batch.is_some() {
+            return Err(Error::InvalidState);
+        }
+
+        state.committed_state.last_poll_time = Utc::now();
+        state.pending_batch = prepared_batch.pending_batch;
+        let processed_documents = state.committed_state.processed_documents;
 
         if self.verbose {
             info!(
                 "MongoDB source connector ID: {} produced {} messages. Total processed: {}",
                 self.id,
-                messages.len(),
-                state.processed_documents
+                prepared_batch.messages.len(),
+                processed_documents
             );
         } else {
             debug!(
                 "MongoDB source connector ID: {} produced {} messages. Total processed: {}",
                 self.id,
-                messages.len(),
-                state.processed_documents
+                prepared_batch.messages.len(),
+                processed_documents
             );
         }
 
         // Derive schema from payload_format config
         let payload_format = PayloadFormat::from_config(self.config.payload_format.as_deref());
         let schema = payload_format.to_schema();
-        let persisted_state = self.serialize_state(&state);
 
         Ok(ProducedMessages {
             schema,
-            messages,
-            state: persisted_state,
+            messages: prepared_batch.messages,
+            state: None,
         })
+    }
+
+    async fn commit_polled_messages_now(&self) -> Result<Option<ConnectorState>, Error> {
+        let pending_batch = {
+            let state = self.state.lock().await;
+            state.pending_batch.clone()
+        };
+
+        if let Some(pending_batch) = pending_batch.as_ref() {
+            if self.config.delete_after_read.unwrap_or(false) {
+                self.delete_processed_documents(
+                    pending_batch.checkpoint_offset.as_ref(),
+                    pending_batch.processed_count,
+                )
+                .await?;
+            } else if let Some(processed_field) = &self.config.processed_field {
+                self.mark_documents_processed(
+                    processed_field,
+                    pending_batch.checkpoint_offset.as_ref(),
+                    pending_batch.processed_count,
+                )
+                .await?;
+            }
+        }
+
+        let mut state = self.state.lock().await;
+        if let Some(pending_batch) = state.pending_batch.take() {
+            if let Some(offset) = pending_batch.checkpoint_offset {
+                state
+                    .committed_state
+                    .tracking_offsets
+                    .insert(pending_batch.collection, offset);
+            }
+            state.committed_state.processed_documents += pending_batch.processed_count;
+        }
+
+        Ok(self.serialize_state(&state.committed_state))
+    }
+
+    async fn discard_polled_messages_now(&self) -> Result<(), Error> {
+        let mut state = self.state.lock().await;
+        state.pending_batch = None;
+        Ok(())
     }
 
     async fn close(&mut self) -> Result<(), Error> {
@@ -409,7 +565,7 @@ impl Source for MongoDbSource {
         let state = self.state.lock().await;
         info!(
             "MongoDB source connector ID: {} closed. Total documents processed: {}",
-            self.id, state.processed_documents
+            self.id, state.committed_state.processed_documents
         );
         Ok(())
     }
@@ -441,7 +597,7 @@ impl MongoDbSource {
     }
 
     /// Retry wrapper: calls execute_poll() with transient error retry logic.
-    async fn poll_collection(&self) -> Result<Vec<ProducedMessage>, Error> {
+    async fn poll_collection(&self) -> Result<PreparedPollBatch, Error> {
         let max_retries = self.get_max_retries();
         let mut attempts = 0u32;
         loop {
@@ -458,37 +614,26 @@ impl MongoDbSource {
     }
 
     /// Core poll implementation: build filter, run find(), convert documents.
-    async fn execute_poll(&self) -> Result<Vec<ProducedMessage>, Error> {
+    async fn execute_poll(&self) -> Result<PreparedPollBatch, Error> {
         let collection = self.get_collection()?;
 
         // Build query filter
         let tracking_field = self.config.tracking_field.as_deref().unwrap_or("_id");
 
         let state = self.state.lock().await;
-        let last_offset = state.tracking_offsets.get(&self.config.collection).cloned();
+        let last_offset = state
+            .committed_state
+            .tracking_offsets
+            .get(&self.config.collection)
+            .cloned();
         drop(state);
 
-        let mut filter = doc! {};
-
-        // Add tracking field filter if we have an offset
-        if let Some(offset) = last_offset {
-            let offset_bson = convert_offset_value_to_bson(&offset, tracking_field);
-            filter.insert(tracking_field, doc! {"$gt": offset_bson});
-        }
-
-        // Apply additional query filter if configured
-        if let Some(query_filter_str) = &self.config.query_filter {
-            let additional_filter: Document =
-                serde_json::from_str(query_filter_str).map_err(|_e| Error::InvalidConfig)?;
-            for (key, value) in additional_filter {
-                filter.insert(key, value);
-            }
-        }
-
-        // Apply processed field filter if configured
-        if let Some(processed_field) = &self.config.processed_field {
-            filter.insert(processed_field, false);
-        }
+        let filter = self.build_filter_document(
+            last_offset.as_ref(),
+            tracking_field,
+            "$gt",
+            self.config.processed_field.as_deref(),
+        )?;
 
         // Build projection if configured
         let projection = if let Some(projection_str) = &self.config.projection {
@@ -547,52 +692,40 @@ impl MongoDbSource {
         let max_offset = batch_offsets.last().cloned();
         let checkpoint_offset = resolve_checkpoint_offset_for_batch(
             &batch_offsets,
-            extra_offset.as_deref(),
+            extra_offset.as_ref(),
             tracking_field,
         );
 
         if tracking_field != "_id"
             && let (Some(boundary_offset), Some(extra_offset)) =
-                (max_offset.as_deref(), extra_offset.as_deref())
+                (max_offset.as_ref(), extra_offset.as_ref())
             && extra_offset == boundary_offset
         {
+            if checkpoint_offset.is_none() {
+                return Err(Error::Storage(format!(
+                    "Tracking field '{}' has duplicate values at the batch boundary in collection '{}'. Reduce batch_size or choose a unique tracking field.",
+                    tracking_field, self.config.collection
+                )));
+            }
+
             warn!(
                 collection = %self.config.collection,
                 tracking_field = %tracking_field,
-                boundary_offset = %boundary_offset,
+                boundary_offset = %boundary_offset.display_offset_value_now(),
                 "Detected duplicate tracking value at batch boundary; rolling checkpoint back to avoid skipping equal offsets"
             );
         }
 
-        // Delete or mark documents FIRST (before checkpointing)
-        // This ensures we don't checkpoint an offset if mark/delete fails
-        // Pass checkpoint_offset directly to avoid reading stale offset from state
-        let expected_count = messages.len() as u64;
-        let side_effect_result = if self.config.delete_after_read.unwrap_or(false) {
-            self.delete_processed_documents(checkpoint_offset.as_deref(), expected_count)
-                .await
-        } else if let Some(processed_field) = &self.config.processed_field {
-            self.mark_documents_processed(
-                processed_field,
-                checkpoint_offset.as_deref(),
-                expected_count,
-            )
-            .await
-        } else {
-            Ok(())
-        };
-
-        // THEN update state with new offset (only after successful mark/delete)
-        let mut state = self.state.lock().await;
-        apply_checkpoint_after_side_effect(
-            &mut state,
-            &self.config.collection,
+        let pending_batch = (!messages.is_empty()).then(|| PendingBatchState {
+            collection: self.config.collection.clone(),
             checkpoint_offset,
-            expected_count,
-            side_effect_result,
-        )?;
+            processed_count: messages.len() as u64,
+        });
 
-        Ok(messages)
+        Ok(PreparedPollBatch {
+            messages,
+            pending_batch,
+        })
     }
 
     async fn document_to_message(
@@ -637,7 +770,14 @@ impl MongoDbSource {
 
         // If payload_field is specified, extract that field; otherwise use entire doc
         let payload_bytes = if let Some(payload_field) = &self.config.payload_field {
-            let payload_value = doc.get(payload_field).ok_or(Error::InvalidRecord)?;
+            let resolved_payload_field = if self.config.snake_case_fields.unwrap_or(false) {
+                to_snake_case(payload_field)
+            } else {
+                payload_field.clone()
+            };
+            let payload_value = doc
+                .get(&resolved_payload_field)
+                .ok_or(Error::InvalidRecord)?;
 
             match payload_format {
                 PayloadFormat::Json => {
@@ -645,7 +785,7 @@ impl MongoDbSource {
                 }
                 PayloadFormat::Bson => {
                     let mut buf = Vec::new();
-                    let bson_doc = doc! { payload_field: payload_value.clone() };
+                    let bson_doc = doc! { resolved_payload_field: payload_value.clone() };
                     bson_doc
                         .to_writer(&mut buf)
                         .map_err(|_| Error::InvalidRecord)?;
@@ -683,44 +823,51 @@ impl MongoDbSource {
         })
     }
 
-    /// Build base filter combining tracking offset, query_filter, and processed_field.
-    /// This ensures delete/mark operations respect the same filters as poll().
-    fn build_base_filter(
+    fn build_filter_document(
         &self,
-        last_offset: Option<&str>,
+        last_offset: Option<&PersistedTrackingOffset>,
         tracking_field: &str,
+        tracking_operator: &str,
+        processed_field: Option<&str>,
     ) -> Result<Document, Error> {
-        let mut filter = doc! {};
+        let mut clauses = Vec::new();
 
-        // Add tracking field filter if we have an offset
         if let Some(offset) = last_offset {
-            let offset_bson = convert_offset_value_to_bson(offset, tracking_field);
-            filter.insert(tracking_field, doc! {"$lte": offset_bson});
+            let offset_bson = offset.to_query_bson_now(tracking_field);
+            clauses.push(doc! {tracking_field: {tracking_operator: offset_bson}});
         }
 
-        // Apply additional query filter if configured (same as poll())
         if let Some(query_filter_str) = &self.config.query_filter {
-            let additional_filter: Document =
-                serde_json::from_str(query_filter_str).map_err(|_e| Error::InvalidConfig)?;
-            for (key, value) in additional_filter {
-                filter.insert(key, value);
-            }
+            clauses.push(
+                serde_json::from_str::<Document>(query_filter_str)
+                    .map_err(|_e| Error::InvalidConfig)?,
+            );
         }
 
-        Ok(filter)
+        if let Some(processed_field) = processed_field {
+            clauses.push(doc! {processed_field: false});
+        }
+
+        Ok(match clauses.len() {
+            0 => doc! {},
+            1 => clauses.pop().unwrap_or_default(),
+            _ => doc! {
+                "$and": clauses.into_iter().map(Bson::Document).collect::<Vec<_>>()
+            },
+        })
     }
 
     async fn delete_processed_documents(
         &self,
-        current_offset: Option<&str>,
+        current_offset: Option<&PersistedTrackingOffset>,
         expected_count: u64,
     ) -> Result<(), Error> {
         let collection = self.get_collection()?;
         let tracking_field = self.config.tracking_field.as_deref().unwrap_or("_id");
 
         if let Some(offset) = current_offset {
-            // Build filter using shared logic (includes query_filter if configured)
-            let delete_filter = self.build_base_filter(Some(offset), tracking_field)?;
+            let delete_filter =
+                self.build_filter_document(Some(offset), tracking_field, "$lte", None)?;
 
             let result = collection.delete_many(delete_filter).await.map_err(|e| {
                 Error::Storage(format!("Failed to delete processed documents: {e}"))
@@ -730,7 +877,8 @@ impl MongoDbSource {
                 ExpectedActualCountMismatch::None => {
                     debug!(
                         "Deleted {} processed documents up to offset: {}",
-                        result.deleted_count, offset
+                        result.deleted_count,
+                        offset.display_offset_value_now()
                     );
                 }
                 ExpectedActualCountMismatch::Partial { expected, actual } => {
@@ -738,7 +886,7 @@ impl MongoDbSource {
                         collection = %self.config.collection,
                         expected,
                         actual,
-                        offset = %offset,
+                        offset = %offset.display_offset_value_now(),
                         "delete_processed_documents: partial mismatch (deleted fewer documents than expected)"
                     );
                 }
@@ -747,7 +895,7 @@ impl MongoDbSource {
                         collection = %self.config.collection,
                         expected,
                         actual = result.deleted_count,
-                        offset = %offset,
+                        offset = %offset.display_offset_value_now(),
                         "delete_processed_documents: complete mismatch (expected deletions but got 0)"
                     );
                 }
@@ -760,15 +908,19 @@ impl MongoDbSource {
     async fn mark_documents_processed(
         &self,
         processed_field: &str,
-        current_offset: Option<&str>,
+        current_offset: Option<&PersistedTrackingOffset>,
         expected_count: u64,
     ) -> Result<(), Error> {
         let collection = self.get_collection()?;
         let tracking_field = self.config.tracking_field.as_deref().unwrap_or("_id");
 
         if let Some(offset) = current_offset {
-            // Build filter using shared logic (includes query_filter if configured)
-            let update_filter = self.build_base_filter(Some(offset), tracking_field)?;
+            let update_filter = self.build_filter_document(
+                Some(offset),
+                tracking_field,
+                "$lte",
+                Some(processed_field),
+            )?;
             let update = doc! {"$set": {processed_field: true}};
 
             let result = collection
@@ -782,7 +934,8 @@ impl MongoDbSource {
                 ExpectedActualCountMismatch::None => {
                     debug!(
                         "Marked {} documents as processed up to offset: {}",
-                        result.matched_count, offset
+                        result.matched_count,
+                        offset.display_offset_value_now()
                     );
                 }
                 ExpectedActualCountMismatch::Partial { expected, actual } => {
@@ -791,7 +944,7 @@ impl MongoDbSource {
                         processed_field = %processed_field,
                         expected,
                         actual,
-                        offset = %offset,
+                        offset = %offset.display_offset_value_now(),
                         "mark_documents_processed: partial mismatch (matched fewer documents than expected)"
                     );
                 }
@@ -801,7 +954,7 @@ impl MongoDbSource {
                         processed_field = %processed_field,
                         expected,
                         actual = result.matched_count,
-                        offset = %offset,
+                        offset = %offset.display_offset_value_now(),
                         "mark_documents_processed: complete mismatch (expected matches but got 0)"
                     );
                 }
@@ -815,6 +968,10 @@ impl MongoDbSource {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn given_int_tracking_offset(value: i64) -> PersistedTrackingOffset {
+        PersistedTrackingOffset::Typed(TrackingOffsetValue::Int64(value))
+    }
 
     fn given_default_config() -> MongoDbSourceConfig {
         MongoDbSourceConfig {
@@ -926,8 +1083,9 @@ mod tests {
         let source = MongoDbSource::new(1, config, None);
 
         let state = source.state.try_lock().unwrap();
-        assert_eq!(state.processed_documents, 0);
-        assert!(state.tracking_offsets.is_empty());
+        assert_eq!(state.committed_state.processed_documents, 0);
+        assert!(state.committed_state.tracking_offsets.is_empty());
+        assert!(state.pending_batch.is_none());
     }
 
     #[test]
@@ -938,8 +1096,13 @@ mod tests {
 
         let state = source.state.try_lock().unwrap();
         assert_eq!(
-            state.tracking_offsets.get(&config.collection),
-            Some(&"63f5b2a0c1234567890abcde".to_string())
+            state
+                .committed_state
+                .tracking_offsets
+                .get(&config.collection),
+            Some(&PersistedTrackingOffset::LegacyString(
+                "63f5b2a0c1234567890abcde".to_string()
+            ))
         );
     }
 
@@ -949,7 +1112,12 @@ mod tests {
         let source = MongoDbSource::new(1, config.clone(), None);
 
         let state = source.state.try_lock().unwrap();
-        assert!(!state.tracking_offsets.contains_key(&config.collection));
+        assert!(
+            !state
+                .committed_state
+                .tracking_offsets
+                .contains_key(&config.collection)
+        );
     }
 
     #[test]
@@ -958,7 +1126,7 @@ mod tests {
         let source = MongoDbSource::new(1, config, None);
 
         let state = source.state.try_lock().unwrap();
-        let connector_state = source.serialize_state(&state);
+        let connector_state = source.serialize_state(&state.committed_state);
 
         assert!(connector_state.is_some());
     }
@@ -1215,18 +1383,65 @@ mod tests {
         let source = MongoDbSource::new(1, config, None);
 
         let filter = source
-            .build_base_filter(Some("42"), "seq")
+            .build_filter_document(Some(&given_int_tracking_offset(42)), "seq", "$lte", None)
             .expect("filter should build");
 
-        let seq = filter
+        let clauses = filter
+            .get_array("$and")
+            .expect("filter should compose clauses with $and");
+        assert_eq!(clauses.len(), 2);
+
+        let tracking_clause = clauses[0]
+            .as_document()
+            .expect("tracking clause should be a document");
+        let seq = tracking_clause
             .get_document("seq")
             .expect("seq filter should be present");
         assert_eq!(seq.get("$lte"), Some(&Bson::Int64(42)));
+
+        let query_clause = clauses[1]
+            .as_document()
+            .expect("query clause should be a document");
         assert_eq!(
-            filter.get("tenant"),
+            query_clause.get("tenant"),
             Some(&Bson::String("alpha".to_string()))
         );
-        assert_eq!(filter.get("kind"), Some(&Bson::String("event".to_string())));
+        assert_eq!(
+            query_clause.get("kind"),
+            Some(&Bson::String("event".to_string()))
+        );
+    }
+
+    #[test]
+    fn query_filter_does_not_overwrite_tracking_clause() {
+        let mut config = given_default_config();
+        config.query_filter = Some(r#"{"seq":{"$lt":100},"tenant":"alpha"}"#.to_string());
+        let source = MongoDbSource::new(1, config, None);
+
+        let filter = source
+            .build_filter_document(Some(&given_int_tracking_offset(42)), "seq", "$gt", None)
+            .expect("filter should build");
+
+        let clauses = filter
+            .get_array("$and")
+            .expect("filter should compose clauses with $and");
+        assert_eq!(clauses.len(), 2);
+
+        let tracking_clause = clauses[0]
+            .as_document()
+            .expect("tracking clause should be a document");
+        let seq = tracking_clause
+            .get_document("seq")
+            .expect("seq filter should be present");
+        assert_eq!(seq.get("$gt"), Some(&Bson::Int64(42)));
+
+        let query_clause = clauses[1]
+            .as_document()
+            .expect("query clause should be a document");
+        let query_seq = query_clause
+            .get_document("seq")
+            .expect("query seq filter should be present");
+        assert_eq!(query_seq.get("$lt"), Some(&Bson::Int32(100)));
     }
 
     #[test]
@@ -1241,40 +1456,170 @@ mod tests {
 
     #[test]
     fn non_unique_tracking_field_does_not_skip_equal_offsets() {
-        let batch_offsets = vec!["1".to_string(), "2".to_string()];
-        let checkpoint = resolve_checkpoint_offset_for_batch(&batch_offsets, Some("2"), "seq");
+        let batch_offsets = vec![given_int_tracking_offset(1), given_int_tracking_offset(2)];
+        let extra_offset = given_int_tracking_offset(2);
+        let checkpoint =
+            resolve_checkpoint_offset_for_batch(&batch_offsets, Some(&extra_offset), "seq");
         assert_eq!(
             checkpoint,
-            Some("1".to_string()),
+            Some(given_int_tracking_offset(1)),
             "Checkpoint should roll back to previous distinct offset at duplicate boundary"
         );
     }
 
     #[test]
-    fn mark_or_delete_failure_does_not_advance_checkpoint() {
-        let mut state = State {
+    fn typed_string_offset_round_trip_preserves_string_kind() {
+        let state = State {
             last_poll_time: Utc::now(),
-            tracking_offsets: HashMap::from([("test_collection".to_string(), "10".to_string())]),
+            tracking_offsets: HashMap::from([(
+                "test_collection".to_string(),
+                PersistedTrackingOffset::Typed(TrackingOffsetValue::String("42".to_string())),
+            )]),
             processed_documents: 5,
         };
+        let connector_state =
+            ConnectorState::serialize(&state, CONNECTOR_NAME, 1).expect("state should serialize");
+        let restored = connector_state
+            .deserialize::<State>(CONNECTOR_NAME, 1)
+            .expect("state should deserialize");
 
-        let result = apply_checkpoint_after_side_effect(
-            &mut state,
-            "test_collection",
-            Some("11".to_string()),
-            3,
-            Err(Error::Storage("forced failure".to_string())),
+        let restored_offset = restored
+            .tracking_offsets
+            .get("test_collection")
+            .expect("offset should exist");
+        assert_eq!(
+            restored_offset,
+            &PersistedTrackingOffset::Typed(TrackingOffsetValue::String("42".to_string()))
+        );
+        assert_eq!(
+            restored_offset.to_query_bson_now("seq"),
+            Bson::String("42".to_string())
+        );
+    }
+
+    #[test]
+    fn legacy_string_offset_remains_backward_compatible() {
+        #[derive(Serialize)]
+        struct LegacyState {
+            last_poll_time: DateTime<Utc>,
+            tracking_offsets: HashMap<String, String>,
+            processed_documents: u64,
+        }
+
+        let connector_state = ConnectorState::serialize(
+            &LegacyState {
+                last_poll_time: Utc::now(),
+                tracking_offsets: HashMap::from([(
+                    "test_collection".to_string(),
+                    "42".to_string(),
+                )]),
+                processed_documents: 5,
+            },
+            CONNECTOR_NAME,
+            1,
+        )
+        .expect("legacy state should serialize");
+        let restored = connector_state
+            .deserialize::<State>(CONNECTOR_NAME, 1)
+            .expect("legacy state should deserialize");
+
+        assert_eq!(
+            restored.tracking_offsets.get("test_collection"),
+            Some(&PersistedTrackingOffset::LegacyString("42".to_string()))
+        );
+        assert_eq!(
+            restored
+                .tracking_offsets
+                .get("test_collection")
+                .expect("offset should exist")
+                .to_query_bson_now("seq"),
+            Bson::Int64(42)
+        );
+    }
+
+    #[tokio::test]
+    async fn payload_field_honors_snake_case_conversion() {
+        let mut config = given_default_config();
+        config.snake_case_fields = Some(true);
+        config.payload_field = Some("eventName".to_string());
+        let source = MongoDbSource::new(1, config, None);
+
+        let message = source
+            .document_to_message(doc! {"eventName": "alpha"}, "seq")
+            .await
+            .expect("document should convert to message");
+        let payload: String =
+            serde_json::from_slice(&message.payload).expect("payload should be valid JSON");
+        assert_eq!(payload, "alpha");
+    }
+
+    #[tokio::test]
+    async fn commit_moves_pending_batch_to_committed_state() {
+        let config = given_default_config();
+        let source = MongoDbSource::new(1, config, None);
+
+        {
+            let mut state = source.state.lock().await;
+            state.pending_batch = Some(PendingBatchState {
+                collection: "test_collection".to_string(),
+                checkpoint_offset: Some(given_int_tracking_offset(11)),
+                processed_count: 3,
+            });
+        }
+
+        let connector_state = source
+            .commit_polled_messages_now()
+            .await
+            .expect("commit should succeed")
+            .expect("state should serialize");
+        let restored = connector_state
+            .deserialize::<State>(CONNECTOR_NAME, 1)
+            .expect("state should deserialize");
+
+        assert_eq!(restored.processed_documents, 3);
+        assert_eq!(
+            restored.tracking_offsets.get("test_collection"),
+            Some(&given_int_tracking_offset(11))
         );
 
-        assert!(result.is_err(), "Expected mark/delete failure to propagate");
+        let live_state = source.state.lock().await;
+        assert!(live_state.pending_batch.is_none());
+        assert_eq!(live_state.committed_state.processed_documents, 3);
+    }
+
+    #[tokio::test]
+    async fn discard_clears_pending_batch_without_advancing_state() {
+        let config = given_default_config();
+        let source = MongoDbSource::new(1, config, None);
+
+        {
+            let mut state = source.state.lock().await;
+            state.committed_state.processed_documents = 5;
+            state
+                .committed_state
+                .tracking_offsets
+                .insert("test_collection".to_string(), given_int_tracking_offset(10));
+            state.pending_batch = Some(PendingBatchState {
+                collection: "test_collection".to_string(),
+                checkpoint_offset: Some(given_int_tracking_offset(11)),
+                processed_count: 3,
+            });
+        }
+
+        source
+            .discard_polled_messages_now()
+            .await
+            .expect("discard should succeed");
+
+        let state = source.state.lock().await;
+        assert!(state.pending_batch.is_none());
+        assert_eq!(state.committed_state.processed_documents, 5);
         assert_eq!(
-            state.tracking_offsets.get("test_collection"),
-            Some(&"10".to_string()),
-            "Checkpoint must not advance on failure"
-        );
-        assert_eq!(
-            state.processed_documents, 5,
-            "Processed count must not advance on failure"
+            state
+                .committed_state
+                .tracking_offsets
+                .get("test_collection"),
+            Some(&given_int_tracking_offset(10))
         );
     }
 }

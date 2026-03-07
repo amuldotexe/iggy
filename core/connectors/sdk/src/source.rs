@@ -20,8 +20,11 @@
 use crate::log::{CallbackLayer, LogCallback};
 use crate::{ConnectorState, Error, Source, get_runtime};
 use serde::de::DeserializeOwned;
-use std::sync::Arc;
-use tokio::{sync::watch, task::JoinHandle};
+use std::sync::{Arc, Mutex, mpsc};
+use tokio::{
+    sync::{oneshot, watch},
+    task::JoinHandle,
+};
 use tracing::{error, info};
 use tracing_subscriber::{EnvFilter, Registry, layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -38,21 +41,69 @@ pub type HandleCallback = extern "C" fn(plugin_id: u32, callback: SendCallback) 
 
 pub type SendCallback = extern "C" fn(plugin_id: u32, messages_ptr: *const u8, messages_len: usize);
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum BatchDeliveryCommand {
+    Commit,
+    Discard,
+}
+
+#[derive(Debug)]
+struct BatchDeliveryRequest {
+    command: BatchDeliveryCommand,
+    response_sender: mpsc::Sender<Result<Option<ConnectorState>, Error>>,
+}
+
+#[derive(Debug, Default)]
+struct BatchDeliverySignalSlot {
+    sender: Mutex<Option<oneshot::Sender<BatchDeliveryRequest>>>,
+}
+
+impl BatchDeliverySignalSlot {
+    fn register_pending_delivery_now(
+        &self,
+    ) -> Result<oneshot::Receiver<BatchDeliveryRequest>, Error> {
+        let (sender, receiver) = oneshot::channel();
+        let mut slot = self.sender.lock().map_err(|_| Error::InvalidState)?;
+        if slot.is_some() {
+            return Err(Error::InvalidState);
+        }
+
+        *slot = Some(sender);
+        Ok(receiver)
+    }
+
+    fn resolve_pending_delivery_now(&self, request: BatchDeliveryRequest) -> Result<(), Error> {
+        let mut slot = self.sender.lock().map_err(|_| Error::InvalidState)?;
+        let sender = slot.take().ok_or(Error::InvalidState)?;
+        sender.send(request).map_err(|_| Error::InvalidState)
+    }
+
+    fn clear_pending_delivery_now(&self) {
+        if let Ok(mut slot) = self.sender.lock() {
+            slot.take();
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct SourceContainer<T: Source + std::fmt::Debug> {
     id: u32,
     source: Option<Arc<T>>,
     shutdown: Option<watch::Sender<()>>,
     task: Option<JoinHandle<()>>,
+    delivery_signal: Arc<BatchDeliverySignalSlot>,
 }
 
 impl<T: Source + std::fmt::Debug + 'static> SourceContainer<T> {
-    pub const fn new(id: u32) -> Self {
+    pub fn new(id: u32) -> Self {
         Self {
             id,
             source: None,
             shutdown: None,
             task: None,
+            delivery_signal: Arc::new(BatchDeliverySignalSlot {
+                sender: Mutex::new(None),
+            }),
         }
     }
 
@@ -159,12 +210,126 @@ impl<T: Source + std::fmt::Debug + 'static> SourceContainer<T> {
         let (shutdown_tx, shutdown_rx) = watch::channel(());
         let plugin_id = self.id;
         let source = Arc::clone(source);
+        let delivery_signal = Arc::clone(&self.delivery_signal);
         let handle = runtime.spawn(async move {
-            let _ = handle_messages(plugin_id, source, callback, shutdown_rx).await;
+            let _ =
+                handle_messages(plugin_id, source, callback, shutdown_rx, delivery_signal).await;
         });
 
         self.shutdown = Some(shutdown_tx);
         self.task = Some(handle);
+        0
+    }
+
+    /// # Safety
+    /// The output pointers must be valid for writes when provided.
+    pub unsafe fn commit(&self, state_ptr: *mut *const u8, state_len: *mut usize) -> i32 {
+        if self.source.is_none() {
+            error!(
+                "Source connector with ID: {} is not initialized - cannot commit.",
+                self.id
+            );
+            return -1;
+        };
+
+        let (response_sender, response_receiver) = mpsc::channel();
+
+        if let Err(err) = self
+            .delivery_signal
+            .resolve_pending_delivery_now(BatchDeliveryRequest {
+                command: BatchDeliveryCommand::Commit,
+                response_sender,
+            })
+        {
+            error!(
+                "Failed to resolve committed delivery for source connector with ID: {}. {err}",
+                self.id
+            );
+            return -1;
+        }
+
+        let state = match response_receiver.recv() {
+            Ok(Ok(state)) => state,
+            Ok(Err(err)) => {
+                error!(
+                    "Failed to commit polled messages for source connector with ID: {}. {err}",
+                    self.id
+                );
+                return -1;
+            }
+            Err(_) => {
+                error!(
+                    "Commit response channel closed for source connector with ID: {}.",
+                    self.id
+                );
+                return -1;
+            }
+        };
+
+        unsafe {
+            if !state_ptr.is_null() && !state_len.is_null() {
+                if let Some(state) = state {
+                    let mut bytes = state.0.into_boxed_slice();
+                    let len = bytes.len();
+                    let ptr = bytes.as_mut_ptr();
+                    std::mem::forget(bytes);
+                    *state_ptr = ptr.cast_const();
+                    *state_len = len;
+                } else {
+                    *state_ptr = std::ptr::null();
+                    *state_len = 0;
+                }
+            }
+        }
+
+        0
+    }
+
+    /// # Safety
+    /// This is safe to invoke.
+    pub unsafe fn discard(&self) -> i32 {
+        if self.source.is_none() {
+            error!(
+                "Source connector with ID: {} is not initialized - cannot discard.",
+                self.id
+            );
+            return -1;
+        };
+
+        let (response_sender, response_receiver) = mpsc::channel();
+
+        if let Err(err) = self
+            .delivery_signal
+            .resolve_pending_delivery_now(BatchDeliveryRequest {
+                command: BatchDeliveryCommand::Discard,
+                response_sender,
+            })
+        {
+            error!(
+                "Failed to resolve discarded delivery for source connector with ID: {}. {err}",
+                self.id
+            );
+            return -1;
+        }
+
+        match response_receiver.recv() {
+            Ok(Ok(_)) => {}
+            Ok(Err(err)) => {
+                error!(
+                    "Failed to discard polled messages for source connector with ID: {}. {err}",
+                    self.id
+                );
+                return -1;
+            }
+            Err(_) => {
+                error!(
+                    "Discard response channel closed for source connector with ID: {}.",
+                    self.id
+                );
+                return -1;
+            }
+        }
+
         0
     }
 }
@@ -174,6 +339,7 @@ async fn handle_messages<T: Source>(
     source: Arc<T>,
     callback: SendCallback,
     mut shutdown: watch::Receiver<()>,
+    delivery_signal: Arc<BatchDeliverySignalSlot>,
 ) -> Result<(), Error> {
     loop {
         tokio::select! {
@@ -192,7 +358,38 @@ async fn handle_messages<T: Source>(
                     continue;
                 };
 
+                let Ok(delivery_receiver) = delivery_signal.register_pending_delivery_now() else {
+                    error!("Failed to register pending delivery for source connector with ID: {plugin_id}");
+                    continue;
+                };
+
                 callback(plugin_id, messages.as_ptr(), messages.len());
+                tokio::select! {
+                    _ = shutdown.changed() => {
+                        let _ = source.discard_polled_messages_now().await;
+                        delivery_signal.clear_pending_delivery_now();
+                        info!("Shutting down source connector with ID: {plugin_id}");
+                        break;
+                    }
+                    request = delivery_receiver => {
+                        let Ok(request) = request else {
+                            error!("Delivery acknowledgement channel closed for source connector with ID: {plugin_id}");
+                            break;
+                        };
+
+                        let response = match request.command {
+                            BatchDeliveryCommand::Commit => source.commit_polled_messages_now().await,
+                            BatchDeliveryCommand::Discard => {
+                                source.discard_polled_messages_now().await.map(|_| None)
+                            }
+                        };
+
+                        if request.response_sender.send(response).is_err() {
+                            error!("Failed to return delivery acknowledgement result for source connector with ID: {plugin_id}");
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -262,6 +459,42 @@ macro_rules! source_connector {
                 return -1;
             };
             instance.1.close()
+        }
+
+        #[cfg(not(test))]
+        #[unsafe(no_mangle)]
+        unsafe extern "C" fn iggy_source_commit(
+            id: u32,
+            state_ptr: *mut *const u8,
+            state_len: *mut usize,
+        ) -> i32 {
+            let Some(instance) = INSTANCES.get(&id) else {
+                tracing::error!(
+                    "Source connector with ID: {id} was not found and cannot be committed."
+                );
+                return -1;
+            };
+            instance.commit(state_ptr, state_len)
+        }
+
+        #[cfg(not(test))]
+        #[unsafe(no_mangle)]
+        unsafe extern "C" fn iggy_source_discard(id: u32) -> i32 {
+            let Some(instance) = INSTANCES.get(&id) else {
+                tracing::error!(
+                    "Source connector with ID: {id} was not found and cannot be discarded."
+                );
+                return -1;
+            };
+            instance.discard()
+        }
+
+        #[cfg(not(test))]
+        #[unsafe(no_mangle)]
+        unsafe extern "C" fn iggy_source_free_state(state_ptr: *mut u8, state_len: usize) {
+            if !state_ptr.is_null() && state_len > 0 {
+                drop(Vec::from_raw_parts(state_ptr, state_len, state_len));
+            }
         }
 
         #[cfg(not(test))]

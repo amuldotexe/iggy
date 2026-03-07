@@ -80,6 +80,10 @@ struct SourceApi {
         log_callback: iggy_connector_sdk::LogCallback,
     ) -> i32,
     iggy_source_handle: extern "C" fn(id: u32, callback: SendCallback) -> i32,
+    iggy_source_commit:
+        extern "C" fn(id: u32, state_ptr: *mut *const u8, state_len: *mut usize) -> i32,
+    iggy_source_discard: extern "C" fn(id: u32) -> i32,
+    iggy_source_free_state: extern "C" fn(state_ptr: *mut u8, state_len: usize),
     iggy_source_close: extern "C" fn(id: u32) -> i32,
     iggy_source_version: extern "C" fn() -> *const std::ffi::c_char,
 }
@@ -198,6 +202,9 @@ async fn main() -> Result<(), RuntimeError> {
             .collect();
         source_wrappers.push(SourceConnectorWrapper {
             callback: source.container.iggy_source_handle,
+            commit: source.container.iggy_source_commit,
+            discard: source.container.iggy_source_discard,
+            free_state: source.container.iggy_source_free_state,
             plugins: source.plugins,
         });
         source_with_plugins.insert(
@@ -436,6 +443,9 @@ struct SourceWithPlugins {
 
 struct SourceConnectorWrapper {
     callback: HandleCallback,
+    commit: extern "C" fn(id: u32, state_ptr: *mut *const u8, state_len: *mut usize) -> i32,
+    discard: extern "C" fn(id: u32) -> i32,
+    free_state: extern "C" fn(state_ptr: *mut u8, state_len: usize),
     plugins: Vec<SourceConnectorPlugin>,
 }
 

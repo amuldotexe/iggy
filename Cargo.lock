@@ -4890,7 +4890,6 @@ dependencies = [
  "once_cell",
  "serde",
  "serde_json",
- "simd-json",
  "tokio",
  "tracing",
  "uuid",

@@ -53,6 +53,43 @@ pub fn cleanup_sender(plugin_id: u32) {
     SOURCE_SENDERS.remove(&plugin_id);
 }
 
+fn commit_source_delivery_state(
+    commit: extern "C" fn(id: u32, state_ptr: *mut *const u8, state_len: *mut usize) -> i32,
+    free_state: extern "C" fn(state_ptr: *mut u8, state_len: usize),
+    plugin_id: u32,
+) -> Result<Option<ConnectorState>, RuntimeError> {
+    let mut state_ptr: *const u8 = std::ptr::null();
+    let mut state_len: usize = 0;
+    let result = commit(plugin_id, &mut state_ptr, &mut state_len);
+    if result != 0 {
+        return Err(RuntimeError::InvalidConfiguration(format!(
+            "Failed to commit polled messages for source connector with ID: {plugin_id}"
+        )));
+    }
+
+    if state_ptr.is_null() || state_len == 0 {
+        return Ok(None);
+    }
+
+    let state_bytes = unsafe { std::slice::from_raw_parts(state_ptr, state_len).to_vec() };
+    free_state(state_ptr.cast_mut(), state_len);
+    Ok(Some(ConnectorState(state_bytes)))
+}
+
+fn discard_source_delivery_now(
+    discard: extern "C" fn(id: u32) -> i32,
+    plugin_id: u32,
+) -> Result<(), RuntimeError> {
+    let result = discard(plugin_id);
+    if result != 0 {
+        return Err(RuntimeError::InvalidConfiguration(format!(
+            "Failed to discard polled messages for source connector with ID: {plugin_id}"
+        )));
+    }
+
+    Ok(())
+}
+
 pub async fn init(
     source_configs: HashMap<String, SourceConfig>,
     iggy_client: &IggyClient,
@@ -257,6 +294,10 @@ pub fn handle(
 ) -> Vec<tokio::task::JoinHandle<()>> {
     let mut handler_tasks = Vec::new();
     for source in sources {
+        let handle = source.callback;
+        let commit = source.commit;
+        let discard = source.discard;
+        let free_state = source.free_state;
         for plugin in source.plugins {
             let plugin_id = plugin.id;
             let plugin_key = plugin.key.clone();
@@ -268,17 +309,16 @@ pub fn handle(
                 );
                 continue;
             }
+            let (sender, receiver): (Sender<ProducedMessages>, Receiver<ProducedMessages>) =
+                flume::unbounded();
+            SOURCE_SENDERS.insert(plugin_id, sender);
             info!("Starting handler for source connector with ID: {plugin_id}...");
 
-            let handle = source.callback;
             tokio::task::spawn_blocking(move || {
                 handle(plugin_id, handle_produced_messages);
             });
             info!("Handler for source connector with ID: {plugin_id} started successfully.");
 
-            let (sender, receiver): (Sender<ProducedMessages>, Receiver<ProducedMessages>) =
-                flume::unbounded();
-            SOURCE_SENDERS.insert(plugin_id, sender);
             let handler_task = tokio::spawn(async move {
                 info!("Source connector with ID: {plugin_id} started.");
                 let Some(producer) = &plugin.producer else {
@@ -317,15 +357,55 @@ pub fn handle(
                     } else {
                         debug!("Source connector with ID: {plugin_id} received {count} messages");
                     }
+
+                    if count == 0 {
+                        let committed_state = match commit_source_delivery_state(
+                            commit, free_state, plugin_id,
+                        ) {
+                            Ok(state) => state,
+                            Err(error) => {
+                                let error_msg = format!(
+                                    "Failed to commit empty source delivery for connector with ID: {plugin_id}. {error}"
+                                );
+                                error!("{error_msg}");
+                                let _ = discard_source_delivery_now(discard, plugin_id);
+                                context
+                                    .metrics
+                                    .increment_errors(&plugin_key, ConnectorType::Source);
+                                context.sources.set_error(&plugin_key, &error_msg).await;
+                                continue;
+                            }
+                        };
+
+                        let state_to_save = committed_state.or(produced_messages.state);
+                        let Some(state) = state_to_save else {
+                            continue;
+                        };
+
+                        match &plugin.state_storage {
+                            StateStorage::File(file) => {
+                                if let Err(error) = file.save(state).await {
+                                    let error_msg = format!(
+                                        "Failed to save state for source connector with ID: {plugin_id}. {error}"
+                                    );
+                                    error!("{error_msg}");
+                                    context.sources.set_error(&plugin_key, &error_msg).await;
+                                }
+                            }
+                        }
+                        continue;
+                    }
+
                     let schema = produced_messages.schema;
                     let mut messages: Vec<DecodedMessage> = Vec::with_capacity(count);
+                    let mut decode_error = None;
                     for message in produced_messages.messages {
                         let Ok(payload) = schema.try_into_payload(message.payload) else {
-                            error!(
+                            decode_error = Some(format!(
                                 "Failed to decode message payload with schema: {} for source connector with ID: {plugin_id}",
                                 produced_messages.schema
-                            );
-                            continue;
+                            ));
+                            break;
                         };
 
                         debug!(
@@ -343,6 +423,16 @@ pub fn handle(
                         number += 1;
                     }
 
+                    if let Some(error_msg) = decode_error {
+                        error!("{error_msg}");
+                        let _ = discard_source_delivery_now(discard, plugin_id);
+                        context
+                            .metrics
+                            .increment_errors(&plugin_key, ConnectorType::Source);
+                        context.sources.set_error(&plugin_key, &error_msg).await;
+                        continue;
+                    }
+
                     let Ok(iggy_messages) = process_messages(
                         plugin_id,
                         &encoder,
@@ -356,6 +446,7 @@ pub fn handle(
                             producer.topic()
                         );
                         error!("{error_msg}");
+                        let _ = discard_source_delivery_now(discard, plugin_id);
                         context
                             .metrics
                             .increment_errors(&plugin_key, ConnectorType::Source);
@@ -370,12 +461,31 @@ pub fn handle(
                             producer.topic(),
                         );
                         error!("{error_msg}");
+                        let _ = discard_source_delivery_now(discard, plugin_id);
                         context
                             .metrics
                             .increment_errors(&plugin_key, ConnectorType::Source);
                         context.sources.set_error(&plugin_key, &error_msg).await;
                         continue;
                     }
+
+                    let committed_state = match commit_source_delivery_state(
+                        commit, free_state, plugin_id,
+                    ) {
+                        Ok(state) => state,
+                        Err(error) => {
+                            let error_msg = format!(
+                                "Failed to commit source delivery for connector with ID: {plugin_id}. {error}"
+                            );
+                            error!("{error_msg}");
+                            let _ = discard_source_delivery_now(discard, plugin_id);
+                            context
+                                .metrics
+                                .increment_errors(&plugin_key, ConnectorType::Source);
+                            context.sources.set_error(&plugin_key, &error_msg).await;
+                            continue;
+                        }
+                    };
 
                     context
                         .metrics
@@ -395,7 +505,8 @@ pub fn handle(
                         );
                     }
 
-                    let Some(state) = produced_messages.state else {
+                    let state_to_save = committed_state.or(produced_messages.state);
+                    let Some(state) = state_to_save else {
                         debug!("No state provided for source connector with ID: {plugin_id}");
                         continue;
                     };
@@ -454,21 +565,19 @@ fn process_messages(
             continue;
         };
 
-        let Ok(payload) = encoder.encode(message.payload) else {
-            error!(
+        let payload = encoder.encode(message.payload).map_err(|_| {
+            Error::Serialization(format!(
                 "Failed to encode message payload for source connector with ID: {id}, stream: {}, topic: {}",
                 topic_metadata.stream, topic_metadata.topic
-            );
-            continue;
-        };
+            ))
+        })?;
 
-        let Ok(iggy_message) = build_iggy_message(payload, message.id, message.headers) else {
-            error!(
-                "Failed to build Iggy message for source connector with ID: {id}, stream: {}, topic: {}",
+        let iggy_message = build_iggy_message(payload, message.id, message.headers).map_err(|e| {
+            Error::Serialization(format!(
+                "Failed to build Iggy message for source connector with ID: {id}, stream: {}, topic: {}. {e}",
                 topic_metadata.stream, topic_metadata.topic
-            );
-            continue;
-        };
+            ))
+        })?;
 
         iggy_messages.push(iggy_message);
     }
@@ -497,6 +606,8 @@ extern "C" fn handle_produced_messages(
                     );
                 }
             }
+        } else {
+            error!("No runtime sender registered for source connector with ID: {plugin_id}");
         }
     }
 }
