@@ -108,6 +108,34 @@ poll_interval = "5s"
 | `max_retries` | `3` | Retry attempts for transient errors |
 | `retry_delay` | `1s` | Base delay (`retry_delay * attempt`) |
 
+## Tracking Field Types
+
+The connector currently supports these BSON kinds for `tracking_field` values:
+
+- `Int32` and `Int64`
+- `Double`
+- `String`
+- `ObjectId`
+- `DateTime`
+
+Notes:
+
+- `Int32` values are normalized into typed `Int64` state when persisted.
+- Fresh checkpoints are saved with type metadata, so typed offsets round-trip without coercion.
+- Unsupported tracking kinds fail the poll with an explicit error naming the collection, tracking field, observed BSON kind, and supported kinds.
+- Custom ObjectId fields that are not named `_id` are still compared as strings.
+
+### Legacy State Compatibility
+
+Older persisted state may still contain untyped string offsets.
+
+That legacy fallback remains supported for backward compatibility, but it is less precise than the typed state path:
+
+- numeric-looking strings such as `"42"` may be interpreted as numeric BSON
+- 24-character hex strings on `_id` may be interpreted as `ObjectId`
+
+Once the connector saves a fresh typed checkpoint, that ambiguity goes away for future resumes.
+
 ## Testing
 
 Requires Docker. Testcontainers starts MongoDB 7 + iggy-server automatically.
@@ -148,8 +176,10 @@ This connector provides **at-least-once** delivery semantics.
 - The source stages each polled batch and only commits progress after the runtime successfully sends the batch to Iggy
 - Checkpoint persistence and `delete_after_read` / `processed_field` side effects run in the post-send commit path
 - If the downstream send or post-send mark/delete fails, the same documents will be re-polled and may be delivered again
+- If delete/mark side effects touch fewer documents than expected but MongoDB still reports success, the connector only warns and continues; it does not roll back delivery or reconcile the side effect automatically
 
 ### Known Limitations
 
 - Custom ObjectId fields (not named `_id`) use string comparison
+- Legacy untyped string-state fallback may reinterpret numeric-looking strings or `_id`-like strings until a typed checkpoint is saved
 - Non-unique tracking fields can stall progress at batch boundaries; use a unique tracking field or lower `batch_size`

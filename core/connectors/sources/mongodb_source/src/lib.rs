@@ -43,6 +43,7 @@ const DEFAULT_RETRY_DELAY: &str = "1s";
 const DEFAULT_POLL_INTERVAL: &str = "10s";
 const DEFAULT_BATCH_SIZE: u32 = 1000;
 const CONNECTOR_NAME: &str = "MongoDB source";
+const SUPPORTED_TRACKING_BSON_KINDS: &str = "int32, int64, double, string, object_id, date_time";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum PayloadFormat {
@@ -147,6 +148,52 @@ fn convert_offset_value_to_bson(offset: &str, tracking_field: &str) -> Bson {
 
     // Fallback to string comparison
     Bson::String(offset.to_string())
+}
+
+fn describe_bson_tracking_kind_now(value: &Bson) -> &'static str {
+    match value {
+        Bson::Double(_) => "double",
+        Bson::String(_) => "string",
+        Bson::Array(_) => "array",
+        Bson::Document(_) => "document",
+        Bson::Boolean(_) => "boolean",
+        Bson::Null => "null",
+        Bson::RegularExpression(_) => "regular_expression",
+        Bson::JavaScriptCode(_) => "javascript_code",
+        Bson::JavaScriptCodeWithScope(_) => "javascript_code_with_scope",
+        Bson::Int32(_) => "int32",
+        Bson::Int64(_) => "int64",
+        Bson::Timestamp(_) => "timestamp",
+        Bson::Binary(_) => "binary",
+        Bson::ObjectId(_) => "object_id",
+        Bson::DateTime(_) => "date_time",
+        Bson::Symbol(_) => "symbol",
+        Bson::Decimal128(_) => "decimal128",
+        Bson::Undefined => "undefined",
+        Bson::MaxKey => "max_key",
+        Bson::MinKey => "min_key",
+        Bson::DbPointer(_) => "db_pointer",
+    }
+}
+
+fn build_missing_field_error_now(collection_name: &str, tracking_field: &str) -> Error {
+    Error::Storage(format!(
+        "Tracking field '{tracking_field}' is missing in collection '{collection_name}'. Projection and query settings must keep the tracking field visible."
+    ))
+}
+
+fn build_tracking_kind_error_now(
+    collection_name: &str,
+    tracking_field: &str,
+    value: &Bson,
+) -> Error {
+    Error::Storage(format!(
+        "Unsupported BSON kind '{}' for tracking field '{}' in collection '{}'. Supported kinds: {}.",
+        describe_bson_tracking_kind_now(value),
+        tracking_field,
+        collection_name,
+        SUPPORTED_TRACKING_BSON_KINDS
+    ))
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -258,12 +305,29 @@ impl<'de> Deserialize<'de> for PersistedTrackingOffset {
     }
 }
 
+#[cfg(test)]
 fn extract_tracking_offset_from_document(
     document: &Document,
     tracking_field: &str,
 ) -> Result<PersistedTrackingOffset, Error> {
     let bson_value = document.get(tracking_field).ok_or(Error::InvalidRecord)?;
     PersistedTrackingOffset::from_bson_value_now(bson_value)
+}
+
+fn extract_tracking_offset_with_context(
+    document: &Document,
+    collection_name: &str,
+    tracking_field: &str,
+) -> Result<PersistedTrackingOffset, Error> {
+    let Some(bson_value) = document.get(tracking_field) else {
+        return Err(build_missing_field_error_now(
+            collection_name,
+            tracking_field,
+        ));
+    };
+
+    PersistedTrackingOffset::from_bson_value_now(bson_value)
+        .map_err(|_| build_tracking_kind_error_now(collection_name, tracking_field, bson_value))
 }
 
 fn find_previous_distinct_offset(
@@ -299,6 +363,40 @@ fn resolve_checkpoint_offset_for_batch(
     }
 
     find_previous_distinct_offset(batch_offsets)
+}
+
+#[derive(Debug, Clone, PartialEq)]
+enum DuplicateBoundaryOutcome {
+    None,
+    Warn(PersistedTrackingOffset),
+    Fail,
+}
+
+fn classify_duplicate_boundary_now(
+    batch_offsets: &[PersistedTrackingOffset],
+    extra_offset: Option<&PersistedTrackingOffset>,
+    tracking_field: &str,
+) -> DuplicateBoundaryOutcome {
+    if tracking_field == "_id" {
+        return DuplicateBoundaryOutcome::None;
+    }
+
+    let Some(boundary_offset) = batch_offsets.last() else {
+        return DuplicateBoundaryOutcome::None;
+    };
+    let Some(extra_offset) = extra_offset else {
+        return DuplicateBoundaryOutcome::None;
+    };
+
+    if extra_offset != boundary_offset {
+        return DuplicateBoundaryOutcome::None;
+    }
+
+    if find_previous_distinct_offset(batch_offsets).is_none() {
+        return DuplicateBoundaryOutcome::Fail;
+    }
+
+    DuplicateBoundaryOutcome::Warn(boundary_offset.clone())
 }
 
 #[derive(Debug)]
@@ -395,6 +493,17 @@ impl MongoDbSource {
                     processed_documents: 0,
                 }
             });
+
+        if initial_state
+            .tracking_offsets
+            .values()
+            .any(|offset| matches!(offset, PersistedTrackingOffset::LegacyString(_)))
+        {
+            warn!(
+                collection = %config.collection,
+                "Loaded legacy untyped tracking offset state; numeric-looking strings and _id-like strings may be reinterpreted until a typed checkpoint is saved"
+            );
+        }
 
         MongoDbSource {
             id,
@@ -678,7 +787,11 @@ impl MongoDbSource {
         let mut batch_offsets = Vec::with_capacity(documents.len());
 
         for doc in documents {
-            let offset = extract_tracking_offset_from_document(&doc, tracking_field)?;
+            let offset = extract_tracking_offset_with_context(
+                &doc,
+                &self.config.collection,
+                tracking_field,
+            )?;
             batch_offsets.push(offset);
 
             let message = self.document_to_message(doc, tracking_field).await?;
@@ -687,33 +800,34 @@ impl MongoDbSource {
 
         let extra_offset = extra_document
             .as_ref()
-            .map(|doc| extract_tracking_offset_from_document(doc, tracking_field))
+            .map(|doc| {
+                extract_tracking_offset_with_context(doc, &self.config.collection, tracking_field)
+            })
             .transpose()?;
-        let max_offset = batch_offsets.last().cloned();
+        let duplicate_boundary =
+            classify_duplicate_boundary_now(&batch_offsets, extra_offset.as_ref(), tracking_field);
         let checkpoint_offset = resolve_checkpoint_offset_for_batch(
             &batch_offsets,
             extra_offset.as_ref(),
             tracking_field,
         );
 
-        if tracking_field != "_id"
-            && let (Some(boundary_offset), Some(extra_offset)) =
-                (max_offset.as_ref(), extra_offset.as_ref())
-            && extra_offset == boundary_offset
-        {
-            if checkpoint_offset.is_none() {
+        match duplicate_boundary {
+            DuplicateBoundaryOutcome::None => {}
+            DuplicateBoundaryOutcome::Warn(boundary_offset) => {
+                warn!(
+                    collection = %self.config.collection,
+                    tracking_field = %tracking_field,
+                    boundary_offset = %boundary_offset.display_offset_value_now(),
+                    "Detected duplicate tracking value at batch boundary; rolling checkpoint back to avoid skipping equal offsets"
+                );
+            }
+            DuplicateBoundaryOutcome::Fail => {
                 return Err(Error::Storage(format!(
                     "Tracking field '{}' has duplicate values at the batch boundary in collection '{}'. Reduce batch_size or choose a unique tracking field.",
                     tracking_field, self.config.collection
                 )));
             }
-
-            warn!(
-                collection = %self.config.collection,
-                tracking_field = %tracking_field,
-                boundary_offset = %boundary_offset.display_offset_value_now(),
-                "Detected duplicate tracking value at batch boundary; rolling checkpoint back to avoid skipping equal offsets"
-            );
         }
 
         let pending_batch = (!messages.is_empty()).then(|| PendingBatchState {
@@ -1455,6 +1569,21 @@ mod tests {
     }
 
     #[test]
+    fn tracking_field_error_names_collection_field_and_kind() {
+        let doc = doc! {"is_processed": true};
+        let result = extract_tracking_offset_with_context(&doc, "events", "is_processed");
+        match result {
+            Err(Error::Storage(message)) => {
+                assert!(message.contains("events"));
+                assert!(message.contains("is_processed"));
+                assert!(message.contains("boolean"));
+                assert!(message.contains(SUPPORTED_TRACKING_BSON_KINDS));
+            }
+            other => panic!("Expected explicit storage error, got {other:?}"),
+        }
+    }
+
+    #[test]
     fn non_unique_tracking_field_does_not_skip_equal_offsets() {
         let batch_offsets = vec![given_int_tracking_offset(1), given_int_tracking_offset(2)];
         let extra_offset = given_int_tracking_offset(2);
@@ -1464,6 +1593,21 @@ mod tests {
             checkpoint,
             Some(given_int_tracking_offset(1)),
             "Checkpoint should roll back to previous distinct offset at duplicate boundary"
+        );
+    }
+
+    #[test]
+    fn all_equal_duplicate_boundary_should_fail_fast() {
+        let batch_offsets = vec![given_int_tracking_offset(7), given_int_tracking_offset(7)];
+        let extra_offset = given_int_tracking_offset(7);
+
+        assert!(matches!(
+            classify_duplicate_boundary_now(&batch_offsets, Some(&extra_offset), "seq"),
+            DuplicateBoundaryOutcome::Fail
+        ));
+        assert_eq!(
+            resolve_checkpoint_offset_for_batch(&batch_offsets, Some(&extra_offset), "seq"),
+            None
         );
     }
 
