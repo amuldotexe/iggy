@@ -1,0 +1,942 @@
+# Parseltongue Ingestion Error Log
+# Generated: 2026-03-11T14:29:46
+# Database: rocksdb:parseltongue20260311142917/analysis.db
+# Source: /Users/amuldotexe/Desktop/iggy-source-2739/iggy
+# Total files: 2945, Processed: 2009, Errors: 936
+#
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.asf.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.config/nextest.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/codecov.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_042a7d8f/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/server_0_local_data/streams/0/topics/0/partitions/0/offsets/consumers/2134603817
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_532bb2f9/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/server_0_local_data/streams/0/topics/0/partitions/0/offsets/consumers/3516392459
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_eeffe222/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_1939fd6a/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_de1c0e55/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_1ec81648/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8adf05f4/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_df2d0c1a/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_082a004b/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_e8111ec8/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_8aa898c1/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/server_0_local_data/streams/0/topics/0/partitions/0/offsets/consumers/4245013108
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c2378350/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_9cbe287a/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_d889dbd2/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/server_0_local_data/streams/0/topics/0/partitions/0/offsets/consumers/4245013108
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_114e8079/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_62ea3768/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_7beac546/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_1f8fc85d/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/server_0_local_data/streams/0/topics/0/partitions/0/offsets/consumers/1411795475
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_dafc0f94/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_2fed7e99/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_04d24c74/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/server_0_local_data/streams/0/topics/0/partitions/0/offsets/consumers/255458483
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_75fde2a1/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_6bfb0695/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_8386ee13/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_63c79907/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_by_object_id_575b30d4/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__mark_processed_sets_field_c83868fe/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_94b75e58/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_452f2acd/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_8e94b544/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/test_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_bebd2182/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__delete_after_read_removes_documents_df7dd070/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/server_0_local_data/streams/0/topics/0/partitions/0/offsets/consumers/4245013108
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_polls_documents_to_iggy_d61fd6b7/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__state_persists_across_connector_restart_7136ab4d/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_delete_after_read_with_object_id_ca94e181/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/server_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/connectors_runtime_0_stdout.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/connectors_runtime_0_state/source_mongodb.state
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/server_0_local_data/streams/0/topics/0/partitions/0/00000000000000000000.index
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/server_0_local_data/runtime/current_config.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/server_0_local_data/state/info - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/server_0_local_data/state/log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/server_0_local_data/logs/iggy-server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/server_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/test_logs/connectors__mongodb__mongodb_source__source_mark_processed_with_object_id_3160dddc/connectors_runtime_0_stderr.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/journal/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/message_bus/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/postgres_sink/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/postgres_sink/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/postgres_sink/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/stdout_sink/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/stdout_sink/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/stdout_sink/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/quickwit_sink/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/quickwit_sink/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/quickwit_sink/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/elasticsearch_sink/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/elasticsearch_sink/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/elasticsearch_sink/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/iceberg_sink/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/iceberg_sink/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sinks/iceberg_sink/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/runtime.http
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/.dockerignore
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/example_config/connectors/stdout_sink.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/example_config/connectors/quickwit_sink.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/example_config/connectors/random_source_v1.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/example_config/connectors/iceberg_sink.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/example_config/connectors/random_source_v0.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/runtime/example_config/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sdk/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sdk/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sdk/examples/user.fbs
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sdk/examples/user.proto
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/random_source/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/random_source/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/random_source/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/elasticsearch_source/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/elasticsearch_source/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/elasticsearch_source/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/mongodb_source/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/mongodb_source/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/mongodb_source/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/postgres_source/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/postgres_source/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/postgres_source/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/connectors/sources/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/consensus/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/runner/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/index.html
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/.cargo/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/index.dev.html
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/scripts/select_index.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/index.prod.html
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/assets/iggy-light.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/assets/iggy-dark.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/assets/style.css
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/frontend/Trunk.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/server/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/server/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/server/Cargo.lock
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/server/docker-entrypoint.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/server/src/.cargo/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/shared/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/dashboard/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/bench/report/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/tools/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/stdout/sink.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/direct/stdout-sink-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/direct/stdout-sink-v0.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/direct/random-source-v0.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/direct/config-versions.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/direct/random-source-v1.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/direct/connectors-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/direct/random-source-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/wrapped/stdout-sink-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/wrapped/stdout-sink-v0.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/wrapped/random-source-v0.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/wrapped/config-versions.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/wrapped/random-source-v1.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/wrapped/connectors-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/__files/wrapped/random-source-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/delete-source-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/get-sink-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/get-source-config-v1.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/get-active-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/get-active-sink-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/get-source-config-v0.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/create-sink.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/create-source.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/set-active-source.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/get-active-versions.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/delete-sink-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/set-active-sink.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/get-sink-config-by-version.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/get-source-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/direct/get-active-source-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/delete-source-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/get-sink-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/get-source-config-v1.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/get-active-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/get-active-sink-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/get-source-config-v0.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/create-sink.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/create-source.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/set-active-source.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/get-active-versions.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/delete-sink-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/set-active-sink.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/get-sink-config-by-version.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/get-source-configs.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/wiremock/mappings/wrapped/get-active-source-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/config_direct.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/http_config_provider/config_wrapped.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/quickwit/sink.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/mongodb/source.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/iceberg/sink.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/postgres/sink.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/postgres/source.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/api/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/random/source.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/elasticsearch/sink.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/integration/tests/connectors/elasticsearch/source.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/binary_protocol/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/server/server.http
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/server/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/server/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/server/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/server/.dockerignore
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/server/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/cli/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/cli/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/partitions/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/common/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/certs/iggy_cert.pem
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/certs/iggy_ca_cert.pem
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/certs/iggy.pfx - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/certs/iggy_key.pem
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/simulator/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/sdk/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/configs_derive/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/ai/mcp/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/ai/mcp/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/ai/mcp/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/ai/mcp/.dockerignore
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/ai/mcp/config.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/ai/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/configs/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/harness_derive/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/metadata/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/core/clock/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/LICENSE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/DISCLAIMER
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/justfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.pre-commit-config.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/LICENSE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/justfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/docs/server-api.http
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/.prettierignore
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/NOTICE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/.dockerignore
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/package-lock.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/package.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/.env
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/static/iggy-apache-darkbg.svg
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/static/favicon.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/static/iggy-apache-lightbg.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/.prettierrc
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/tsconfig.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/docker-compose.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/styles/tooltip.css
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/styles/variables.css
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/styles/app.css
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/RouteComponents/Settings/UsersTab.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/RouteComponents/Settings/UsersTabActions.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/RangeInput.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Combobox.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/MessageDecoder/MessageDecoder.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Icon.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Header.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/ModalConfirmation.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/PasswordInput.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/LoadingIndicator.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/DropdownMenu/DropdownMenu.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Select.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Listbox.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/FixedSvelteComponent.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/DeleteButtonWithConfirmation.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/AddPartitionsModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/DeletePartitionsModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/AddUserModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/AddStreamModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/InspectMessage.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/ModalBase.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/AddTopicModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/AppModals.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/DeleteUserModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/TopicSettingsModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/StreamSettingsModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/EditUserModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Modals/EditUserPermissionsModal.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/SlimSortableList.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/PreventEventsPropagation.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Button.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/ThemeController.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Checkbox.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Toggler.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Logo/Logo.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Logo/LogoMark.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Logo/LogoType.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Layouts/SettingsLayout.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/AppToasts.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/SortableList.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Paginator.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Input.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Navbar.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Loader.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/PermissionsManager.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/Breadcrumbs.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/StopPropagation.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/lib/components/PeriodicInvalidator.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/app.html
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/auth/logout/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/auth/sign-in/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/auth/+layout.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/+error.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/clients/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/settings/terminal/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/settings/server/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/settings/users/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/settings/webUI/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/streams/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/streams/[streamId=i32]/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/streams/[streamId=i32]/topics/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/streams/[streamId=i32]/topics/[topicId=i32]/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/streams/[streamId=i32]/topics/[topicId=i32]/partitions/[partitionId=i32]/messages/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/streams/[streamId=i32]/topics/[topicId=i32]/partitions/[partitionId=i32]/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/streams/+layout.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/logs/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/overview/+page.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/dashboard/+layout.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/web/src/routes/+layout.svelte
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/DEPENDENCIES.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/Cargo.lock
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/PULL_REQUEST_TEMPLATE.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/NOTICE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/cliff.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.prd/generic-notes/SINK_SIDE_SYNC_BOUNDARY_SPEC.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.prd/generic-notes/MONGODB_SOURCE_REMAINING_GAPS_SPEC_20260307222339.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.prd/generic-notes/CONNECTORS_REMAINING_WORK.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.prd/generic-notes/CONNECTORS_JOURNAL.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.prd/generic-notes/CONNECTOR_BEHAVIOR_TEMPLATE.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.prd/generic-notes/MONGODB_SOURCE_CORRECTNESS_SPEC.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.dockerignore
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/CONTRIBUTING.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/go/go.mod
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/go/go.sum
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/go/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/python/requirements.txt
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/python/uv.lock
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/python/pyproject.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/python/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/rust/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/rust/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/rust/src/sink-data-producer/docker-compose.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/rust/src/message-headers/message-compression/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/java/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/java/gradle/wrapper/gradle-wrapper.properties
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/java/gradlew
+[EXTRACT_FAIL] Processing error: Tree-sitter parsing failed:  - Unsupported language: Kotlin
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/java/gradle.properties
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/Iggy_SDK.Examples.sln
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/.editorconfig
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/Iggy_SDK.Examples.sln.DotSettings
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/Iggy_SDK.Examples.Shared/Iggy_SDK.Examples.Shared.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/MessageEnvelope/Iggy_SDK.Examples.MessageEnvelope.Producer/Iggy_SDK.Examples.MessageEnvelope.Producer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/MessageEnvelope/Iggy_SDK.Examples.MessageEnvelope.Consumer/Iggy_SDK.Examples.MessageEnvelope.Consumer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/Basic/Iggy_SDK.Examples.Basic.Consumer/Iggy_SDK.Examples.Basic.Consumer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/Basic/Iggy_SDK.Examples.Basic.Consumer/appsettings.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/Basic/Iggy_SDK.Examples.Basic.Producer/appsettings.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/Basic/Iggy_SDK.Examples.Basic.Producer/Iggy_SDK.Examples.Basic.Producer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/NewSdk/Iggy_SDK.Examples.NewSdk.Consumer/Iggy_SDK.Examples.NewSdk.Consumer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/NewSdk/Iggy_SDK.Examples.NewSdk.Producer/Iggy_SDK.Examples.NewSdk.Producer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/GettingStarted/Iggy_SDK.Examples.GettingStarted.Consumer/Iggy_SDK.Examples.GettingStarted.Consumer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/GettingStarted/Iggy_SDK.Examples.GettingStarted.Producer/Iggy_SDK.Examples.GettingStarted.Producer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/MessageHeaders/Iggy_SDK.Examples.MessageHeaders.Producer/Iggy_SDK.Examples.MessageHeaders.Producer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/csharp/src/MessageHeaders/Iggy_SDK.Examples.MessageHeaders.Consumer/Iggy_SDK.Examples.MessageHeaders.Consumer.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/node/.editorconfig
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/node/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/node/test-examples.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/node/package-lock.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/examples/node/package.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/prepare-release.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/utils.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/run-rust-examples-from-readme.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/prepare-cross-toml.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/copy-latest-from-master.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/ci/sync-rust-version.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/ci/shellcheck.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/ci/trailing-whitespace.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/ci/license-headers.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/ci/taplo.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/ci/licenses-list.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/ci/markdownlint.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/ci/trailing-newline.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/ci/python-version-sync.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/run-node-examples-from-readme.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/extract-version.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/cross-docker-entrypoint.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/dashboard/run_dev.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/run-bdd-tests.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/run-csharp-examples-from-readme.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/run-benches.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/check-backwards-compat.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/profile.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/run-java-examples-from-readme.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/performance/utils.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/performance/run-standard-performance-suite.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/run-go-examples-from-readme.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/scripts/run-python-examples-from-readme.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/ASF_LICENSE.txt
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/import_edges.tsv
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/external_ref_edges.tsv
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/all_files.txt
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/summary.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/tooling.tsv
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/code_files.txt
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/files.tsv
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/symbols.tsv
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/dependency_graph.dot
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/internal_file_edges.tsv
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.code-map/dependency_graph.mmd
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.factory/settings.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/docker-compose.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.typos.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/rust-toolchain.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/go/go.mod
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/go/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/go/go.sum
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/python/requirements.txt
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/python/uv.lock
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/python/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/python/pyproject.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/rust/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/rust/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/java/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/java/gradle/wrapper/gradle-wrapper.properties
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/java/gradlew
+[EXTRACT_FAIL] Processing error: Tree-sitter parsing failed:  - Unsupported language: Kotlin
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/scenarios/basic_messaging.feature
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/scenarios/leader_redirection.feature
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/csharp/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/docker-compose.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/bdd/node/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.vscode/settings.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.taplo.toml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/server.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/bench.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/web_ui.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/iggy_architecture.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/benchmarking_platform.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/cli.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/files_structure.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/iggy_mcp_server.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-b&wlight.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-sygnet-color-darkbg.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-color-lightbg.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-logo-wo-sygnet-light.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-sygnet-b&wdark.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-logo-wo-sygnet-dark.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-b&wdark.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-sygnet-b&wlight.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-sygnet-color-lightbg.svg
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/SVG/iggy-apache-color-darkbg.svg
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-sygnet-b&wlight@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-logo-wo-sygnet-dark@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-sygnet-b&wdark@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-color-lightbg@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-sygnet-color-lightbg@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-b&wdark@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-logo-wo-sygnet-light@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-sygnet-color-darkbg@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-color-darkbg@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/0.5x/iggy-apache-b&wlight@0.5x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-sygnet-color-lightbg@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-color-darkbg@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-b&wdark@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-color-lightbg@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-logo-wo-sygnet-dark@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-b&wlight@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-logo-wo-sygnet-light@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-sygnet-b&wdark@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-sygnet-b&wlight@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/logo/4x/iggy-apache-sygnet-color-darkbg@4x.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/iggy.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/iggy_black.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/assets/sample.png - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.markdownlint.yml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/rust_out - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/go.mod
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/LICENSE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/go.sum
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/NOTICE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/samples/producer/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/samples/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/samples/consumer/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/scripts/run_tcp_e2e.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/go/errors/errors.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/Cargo.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/Dockerfile.test
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/LICENSE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/uv.lock
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/apache_iggy.pyi
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/pyproject.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/.devcontainer/Dockerfile
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/.devcontainer/docker-compose.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/.devcontainer/devcontainer.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/NOTICE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/scripts/test.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/python/docker-compose.test.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/LICENSE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/.java-version
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/java-sdk/src/test/resources/logback-test.xml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/java-sdk/src/main/resources/iggy-version.properties
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/NOTICE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/gradle/libs.versions.toml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/gradle/wrapper/gradle-wrapper.properties
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/gradlew
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-flink/docker/Dockerfile.flink2_10-java21
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-flink/docker-compose.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-flink/iggy-flink-examples/data-population-explanation.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-flink/iggy-flink-examples/deploy-and-run-word-count-job.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-flink/iggy-connector-library/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-pinot/integration-test.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-pinot/deployment/table.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-pinot/deployment/schema.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-pinot/examples/sample-messages.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-pinot/examples/schema.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-pinot/examples/table-config.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-pinot/docker-compose.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-pinot/src/main/resources/pinot-plugin.properties
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/external-processors/iggy-connector-pinot/src/main/resources/META-INF/services/org.apache.pinot.spi.stream.StreamConsumerFactory
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/BUILD_AND_TEST.md
+[EXTRACT_FAIL] Processing error: Tree-sitter parsing failed:  - Unsupported language: Kotlin
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/gradle.properties
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/dev-support/checkstyle/suppressions.xml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/java/dev-support/checkstyle/checkstyle.xml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Iggy_SDK.sln.DotSettings
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/LICENSE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Directory.Build.props
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/DEPENDENCIES.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Directory.Packages.props
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Iggy_SDK.sln
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Shared/Shared.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/.editorconfig
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/NOTICE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Iggy_SDK/Iggy_SDK.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/.dockerignore
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Iggy_SDK.Tests.BDD/Iggy_SDK.Tests.BDD.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Iggy_SDK.Tests.BDD/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Benchmarks/Benchmarks.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/scripts/pack.sh
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/global.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Iggy_SDK.Tests.Integration/Iggy_SDK.Tests.Integration.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/csharp/Iggy_SDK_Tests/Iggy_SDK_Tests.csproj
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/LICENSE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/CHANGELOG.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/NOTICE
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/package-lock.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/package.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/tsconfig.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/docker-compose.yml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/cucumber.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/eslint.config.mjs
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/foreign/node/src/bdd/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/Chart.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/.helmignore
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/README.md
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/servicemonitor.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/deployment.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/NOTES.txt
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/iggy-pvc.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/ingress.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/root-user-credentials.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/service.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/hpa.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/serviceaccount.yaml
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/templates/_helpers.tpl
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/helm/charts/iggy/values.yaml
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/manifest - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/data/OPTIONS-000007
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/data/OPTIONS-000009
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/data/000010.log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/data/IDENTITY
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/data/000011.sst - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/data/LOCK
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/data/CURRENT
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/data/LOG
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/analysis.db/data/MANIFEST-000005 - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311115015/ingestion-errors.txt
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/.markdownlint.json
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311142917/analysis.db/manifest - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311142917/analysis.db/data/OPTIONS-000007
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311142917/analysis.db/data/OPTIONS-000009
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311142917/analysis.db/data/000004.log - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311142917/analysis.db/data/IDENTITY
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311142917/analysis.db/data/LOCK
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311142917/analysis.db/data/CURRENT
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311142917/analysis.db/data/LOG
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue20260311142917/analysis.db/data/MANIFEST-000005 - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: File system error: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue-runs/parseltongue-1.7.2-20260311-115009/bin/parseltongue - stream did not contain valid UTF-8
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue-runs/parseltongue-1.7.2-20260311-115009/queries/folder-structure-discovery-tree.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue-runs/parseltongue-1.7.2-20260311-115009/queries/server-health-check-status.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue-runs/parseltongue-1.7.2-20260311-115009/queries/codebase-statistics-overview-summary.json
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue-runs/parseltongue-1.7.2-20260311-115009/run.config
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue-runs/parseltongue-1.7.2-20260311-115009/logs/server.log
+[EXTRACT_FAIL] Processing error: Unsupported file type: /Users/amuldotexe/Desktop/iggy-source-2739/iggy/parseltongue-runs/parseltongue-1.7.2-20260311-115009/server.pid

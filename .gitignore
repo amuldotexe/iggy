@@ -40,3 +40,4 @@ foreign/node/.npm
 *.out
 go.work
 core/bench/dashboard/frontend/dist
+.code-map/
