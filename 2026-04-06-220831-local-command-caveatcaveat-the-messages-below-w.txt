@@ -1,0 +1,1618 @@
+╭─── Claude Code v2.1.87 ──────────────────────────────────────────────────────╮
+│                                                    │ Tips for getting        │
+│             Welcome back that in rust!             │ started                 │
+│                                                    │ Run /init to create a … │
+│                      ▗ ▗   ▖ ▖                     │ ─────────────────────── │
+│                                                    │ Recent activity         │
+│                        ▘▘ ▝▝                       │ No recent activity      │
+│       Opus 4.6 (1M context) · Claude Max ·         │                         │
+│       thatinrust@gmail.com's Organization          │                         │
+│      ~/…/hogwarts202603/research20250315/iggy      │                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ /effort max                                                                   
+  ⎿  Set effort level to max (this session only): Maximum capability with
+     deepest reasoning (Opus 4.6 only)
+
+❯ /agents                                                                       
+  ⎿  Agent changes:
+     Created agent: superintelligent-polymath
+
+❯ use @"superintelligent-polymath (agent)" to figure out the whole design       
+mindset behind creating @core/connectors/ and how the code was structured and   
+evolved - if needed use GHCLI to study issues or commits or past - study        
+competitors or web or forums and then create a Minto Pyramid Principle          
+structured MD document in amul_docs/ folder with YYYYMMDDHHSS suffix in name of 
+ the md file                                                                    
+  ⎿  Listed directory core/connectors/
+
+⏺ I'll invoke the superintelligent-polymath agent to conduct this deep analysis
+  of the core/connectors/ architecture, its design philosophy, evolution, and
+  competitive landscape.
+
+⏺ superintelligent-polymath(Deep analysis of core/connectors design)
+  ⎿  Done (44 tool uses · 132.3k tokens · 7m 20s)
+  (ctrl+o to expand)
+
+⏺ The analysis is complete. Let me verify the output.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Document created at amul_docs/20260402_0100_iggy_connectors_design_analysis.md
+   (558 lines, ~34KB).
+
+  What's inside (Minto Pyramid structure):
+
+  Section: Executive Summary (SCQA)
+  Content: Frames the core tension: extensible connectors for a
+    performance-obsessed Rust streaming platform, resolved via
+  dynamically-loaded
+     shared libraries over C FFI
+  ────────────────────────────────────────
+  Section: Finding 1: Design Philosophy
+  Content: "Statically typed, dynamically loaded" -- process isolation, C FFI as
+
+    stability contract (dlopen2 + postcard), macro-hidden complexity
+    (sink_connector!/source_connector!)
+  ────────────────────────────────────────
+  Section: Finding 2: Architecture
+  Content: Three-layer separation -- SDK (traits: Source, Sink, Transform,
+    Payload enum, FFI macros), Runtime (lifecycle, config, transforms, state
+    persistence, HTTP API, Prometheus), Connectors (standalone cdylib crates: 8
+    sinks, 4 sources)
+  ────────────────────────────────────────
+  Section: Finding 3: Evolution
+  Content: Chronological from genesis PR #1826 (May 2025) through 30+ milestone
+    PRs, including bugs that shaped architecture (POSIX symbol collision, state
+    loss on restart, recursive plugin loading)
+  ────────────────────────────────────────
+  Section: Finding 4: Competitive Positioning
+  Content: 11-dimension comparison matrix vs Kafka Connect, Pulsar IO, Redpanda
+    Connect -- Iggy excels in raw performance/memory but needs to close gaps in
+    delivery semantics, ecosystem scale (~12 vs hundreds), and language
+    restriction (Rust-only)
+  ────────────────────────────────────────
+  Section: Appendices
+  Content: Module dependency graph, commit timeline, 10 key open issues,
+    dependency highlights
+
+✻ Sautéed for 7m 50s
+
+❯ @"eli5-ascii-explainer (agent)" :   ---                                       
+  The Shared Sink Trait (3 methods, that's all)                                 
+                                                                                
+  From core/connectors/sdk/src/lib.rs:                                          
+                                                                                
+   trait Sink: Send + Sync {                                                    
+       async fn open()    → connect to target, create table/collection/index    
+       async fn consume() → write a batch of messages to target                 
+       async fn close()   → tear down                                           
+   }                                                                            
+                                                                                
+  ---                                                                           
+  The Code Flow: Poll to Write                                                  
+                                                                                
+   runtime/src/sink.rs                    server/src/shard/system/messages.rs   
+   consume_messages()                     IggyShard::poll_messages()            
+     │                                       │                                  
+     │ consumer.next().await                 │ resolve consumer + partition     
+     │     │                                 │ dispatch to data plane           
+     │     └──── TCP ────────────────────────┘                                  
+     │                                       │                                  
+     │ ◀── batch of ConsumedMessages ────────┘                                  
+     │                                    partitions/ops.rs                     
+     │                                    get_messages_by_offset()              
+     │                                      DISK → IN-FLIGHT → JOURNAL          
+     │                                      (three-tier splice)                 
+     │                                                                          
+     ├── decode payload (Json/Raw/Text)                                         
+     ├── apply transform chain (filter, delete fields)                          
+     ├── serialize via postcard (for FFI boundary)                              
+     └── call plugin: sink.consume(topic_meta, msgs)                            
+           │                                                                    
+      ┌────┴────┬────────────┐                                                  
+      v         v            v                                                  
+    PG sink   Mongo sink   ES sink                                              
+                                                                                
+ -- DO NOT CREATE A DOC just explain here with ASCII code                       
+
+⏺ eli5-ascii-explainer(ASCII explain sink connector flow)
+  ⎿  Done (11 tool uses · 64.4k tokens · 2m 40s)
+  (ctrl+o to expand)
+
+⏺ Iggy Sink Connector Architecture -- ELI5 with ASCII Art
+
+  LAYER 0: THE ESSENCE (read this and you get 80% of it)
+
+  A sink connector is a waiter who picks up dishes (messages) from the Iggy 
+  kitchen, cleans them up, and delivers them to whatever restaurant table 
+  (database/service) you choose.
+
+  The entire plugin contract is just 3 methods. That is it.
+
+      ┌─────────────────────────────────────────────┐
+      │           THE SINK TRAIT (3 methods)         │
+      │                                              │
+      │   open()    -- Seat yourself, get ready      │
+      │   consume() -- Take the plate, serve it      │
+      │   close()   -- Clean up, go home             │
+      │                                              │
+      └─────────────────────────────────────────────┘
+
+      ┌──────────┐    poll     ┌──────────┐  transform  ┌──────────┐
+      │  Iggy    │───batches──>│ Runtime  │────clean────>│  YOUR    │
+      │  Server  │   of msgs   │  Engine  │   & shape    │  SINK    │
+      │          │◀──TCP/QUIC──│          │──postcard───>│ (plugin) │
+      └──────────┘             └──────────┘   via FFI    └──────────┘
+                                                          │  │  │
+                                                ┌─────────┘  │  └────────┐
+                                                v            v           v
+                                             ┌────┐     ┌───────┐   ┌────┐
+                                             │ PG │     │ Mongo │   │ ES │
+                                             └────┘     └───────┘   └────┘
+
+  ---
+  LAYER 1: THE THREE-METHOD CONTRACT
+
+  Think of a restaurant waiter's shift:
+
+   MORNING: open()                DURING SERVICE: consume()         END OF DAY:
+  close()
+   ┌──────────────────┐           ┌──────────────────────┐
+  ┌──────────────────┐
+   │                  │           │                      │          │
+         │
+   │  "Hi, I'm your  │           │  "Here are 100       │          │  "Last
+  call!     │
+   │   waiter. Let    │           │   plates of data.    │          │   Closing
+  the    │
+   │   me set up my   │           │   I'll put them on   │          │
+  connection     │
+   │   station."      │           │   your table."       │          │   pool.
+  Stats:   │
+   │                  │           │                      │          │   42,000
+  served" │
+   │  - Connect to DB │           │  - Receive batch     │          │
+         │
+   │  - Create table  │           │  - INSERT rows       │          │  -
+  pool.close()  │
+   │  - Test "SELECT" │           │  - Retry on failure  │          │  - Log
+  summary   │
+   │                  │           │                      │          │
+         │
+   └──────────────────┘           └──────────────────────┘
+  └──────────────────┘
+      Called ONCE                    Called MANY times                  Called
+  ONCE
+      at startup                    (every batch)                      at
+  shutdown
+
+  The actual Rust trait:
+
+   #[async_trait]
+   trait Sink: Send + Sync {
+
+       async fn open(&mut self) -> Result<(), Error>;
+       //            ^^^^^^^^
+       //            &mut = you can store state (connection pools, etc.)
+
+       async fn consume(
+           &self,                               // shared ref: multiple tasks OK
+           topic_metadata: &TopicMetadata,      // which stream + topic
+           messages_metadata: MessagesMetadata, // partition, offset, schema
+           messages: Vec<ConsumedMessage>,       // the actual data!
+       ) -> Result<(), Error>;
+
+       async fn close(&mut self) -> Result<(), Error>;
+   }
+
+  Key insight: open and close take &mut self (exclusive access), but consume 
+  takes &self (shared). The runtime can call consume concurrently after setup.
+
+  ---
+  LAYER 2: THE FULL DATA FLOW -- From Disk to Database
+
+  Stage 1-2: Polling & Decoding
+
+   runtime/src/sink.rs                    sdk/src/decoders/
+   ┌──────────────────────────────────────────────────────┐
+   │                                                      │
+   │  consumer.next().await                               │
+   │       │                                              │
+   │       │  IggyConsumer polls server via TCP            │
+   │       v                                              │
+   │  ┌─────────────────────┐    ┌──────────────────────┐ │
+   │  │  IggyMessage        │    │  ReceivedMessage     │ │
+   │  │  (raw bytes from    │───>│  (id, offset,        │ │
+   │  │   the wire)         │    │   checksum, headers, │ │
+   │  │                     │    │   payload: Vec<u8>)  │ │
+   │  └─────────────────────┘    └──────────┬───────────┘ │
+   │                                        │             │
+   │                               decoder.decode()       │
+   │                                        v             │
+   │                             ┌────────────────────┐   │
+   │                             │  DecodedMessage    │   │
+   │                             │  payload: Payload  │   │
+   │                             │  ┌──────────────┐  │   │
+   │                             │  │ Json(Value)  │  │   │
+   │                             │  │ Raw(bytes)   │  │   │
+   │                             │  │ Text(string) │  │   │
+   │                             │  │ Proto(...)   │  │   │
+   │                             │  │ FlatBuf(...) │  │   │
+   │                             │  └──────────────┘  │   │
+   │                             └────────────────────┘   │
+   └──────────────────────────────────────────────────────┘
+
+  Stage 3: Transform Pipeline (conveyor belt)
+
+    DecodedMessage
+         │
+         v
+    ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+  ┌──────────────┐
+    │  add_fields   │────>│ delete_fields │────>│ filter_fields │────>│
+  update_fields │
+    │ {"ts": uuid}  │     │ ["internal"]  │     │ {key: regex}  │     │ {old:
+  new}    │
+    └──────────────┘     └──────────────┘     └──────────────┘
+  └──────────────┘
+                                                      │
+                                                Returns None?
+                                                Message DROPPED!
+                                                Never reaches sink.
+
+  Stage 4: The FFI Boundary (the customs checkpoint)
+
+    RUNTIME PROCESS                     PLUGIN (.so/.dylib)
+    ┌──────────────────────┐            ┌──────────────────────┐
+    │                      │            │                      │
+    │  DecodedMessage      │            │                      │
+    │  (rich Rust types)   │            │                      │
+    │       │              │            │                      │
+    │       v              │  raw ptrs  │  ┌─────────────┐    │
+    │  ┌─────────────┐     │  + lens    │  │ postcard::   │   │
+    │  │ postcard::   │─────┼──────────>│  │ from_bytes   │   │
+    │  │ to_allocvec  │     │            │  └──────┬──────┘    │
+    │  └─────────────┘     │            │         v           │
+    │                      │            │  ConsumedMessage    │
+    │  3 things cross:     │            │         │           │
+    │  1. topic_meta bytes │            │         v           │
+    │  2. msgs_meta bytes  │            │  sink.consume(...)  │
+    │  3. messages bytes   │            │     YOUR CODE!      │
+    └──────────────────────┘            └──────────────────────┘
+
+  Why postcard? no_std-compatible, fast, compact, deterministic. Perfect for FFI
+   where both sides are Rust but compiled separately.
+
+  ---
+  LAYER 3: THE RUNTIME LIFECYCLE (Top to Bottom)
+
+    Step 1: BOOT
+    ┌──────────────────────────────────────────────┐
+    │  Load config.toml → Init logging → Connect   │
+    └────────────────────┬─────────────────────────┘
+                         │
+    Step 2: LOAD PLUGINS │
+    ┌────────────────────v─────────────────────────┐
+    │  resolve_plugin_path("pg_sink")              │
+    │  Container::load(&path)  <-- dlopen2         │
+    │  ┌──────────────────────────────────┐        │
+    │  │ SinkApi (function pointers)      │        │
+    │  │  .iggy_sink_open    ──> fn ptr   │        │
+    │  │  .iggy_sink_consume ──> fn ptr   │        │
+    │  │  .iggy_sink_close   ──> fn ptr   │        │
+    │  └──────────────────────────────────┘        │
+    │  call iggy_sink_open(id, config, cb)         │
+    └────────────────────┬─────────────────────────┘
+                         │
+    Step 3: SETUP CONSUMERS
+    ┌────────────────────v─────────────────────────┐
+    │  IggyConsumer::builder()                     │
+    │    .consumer_group("iggy-connect-sink-pg")   │
+    │    .auto_commit(When::PollingMessages)       │
+    │    .poll_interval(5ms)                       │
+    │    .batch_length(1000)                       │
+    │    .build().init()                           │
+    └────────────────────┬─────────────────────────┘
+                         │
+    Step 4: CONSUME LOOP │  (runs until shutdown)
+    ┌────────────────────v─────────────────────────┐
+    │  loop {                                      │
+    │    select! {                                 │
+    │      shutdown => break,                      │
+    │      msg = consumer.next() => {              │
+    │        decode → transform → serialize → FFI  │
+    │      }                                       │
+    │    }                                         │
+    │  }                                           │
+    └────────────────────┬─────────────────────────┘
+                         │
+    Step 5: SHUTDOWN     │
+    ┌────────────────────v─────────────────────────┐
+    │  iggy_sink_close(id) → client.shutdown()     │
+    └──────────────────────────────────────────────┘
+
+  ---
+  THE MAGIC MACRO: sink_connector!()
+
+    YOUR CODE                          MACRO GENERATES
+    ─────────                          ───────────────
+
+    struct PostgresSink { ... }         static INSTANCES: DashMap<u32,
+                                          SinkContainer<PostgresSink>>;
+    impl Sink for PostgresSink {
+        fn open(...)  { ... }          extern "C" fn iggy_sink_open(...)
+        fn consume(...) { ... }        extern "C" fn iggy_sink_consume(...)
+        fn close(...)  { ... }         extern "C" fn iggy_sink_close(...)
+    }                                  extern "C" fn iggy_sink_version(...)
+
+    sink_connector!(PostgresSink);     // DashMap allows multiple instances
+                                       // from the SAME .so file!
+
+  ---
+  YOU WRITE vs. RUNTIME HANDLES (FOR FREE)
+
+    WHAT YOU WRITE (~50 lines)        WHAT THE RUNTIME HANDLES
+    ┌───────────────────────┐         ┌───────────────────────┐
+    │  struct MySink         │         │  Config loading       │
+    │  impl Sink             │         │  Plugin discovery     │
+    │    open:  connect      │         │  dlopen2 loading      │
+    │    consume: INSERT     │         │  Consumer groups      │
+    │    close: disconnect   │         │  Offset tracking      │
+    │  sink_connector!()     │         │  Batch accumulation   │
+    │                        │         │  Payload decoding     │
+    │  That's it.            │         │  Transform pipeline   │
+    │                        │         │  postcard ser/deser   │
+    │                        │         │  FFI boundary mgmt    │
+    │                        │         │  Graceful shutdown    │
+    │                        │         │  Metrics + Signals    │
+    └───────────────────────┘         └───────────────────────┘
+
+✻ Brewed for 10m 2s
+
+❯ @"eli5-ascii-explainer (agent)" :    The actual Rust trait:                   
+                                                                                
+   #[async_trait]                                                               
+   trait Sink: Send + Sync {                                                    
+                                                                                
+       async fn open(&mut self) -> Result<(), Error>;                           
+       //            ^^^^^^^^                                                   
+       //            &mut = you can store state (connection pools, etc.)        
+                                                                                
+       async fn consume(                                                        
+           &self,                               // shared ref: multiple tasks   
+OK                                                                              
+           topic_metadata: &TopicMetadata,      // which stream + topic         
+           messages_metadata: MessagesMetadata, // partition, offset, schema    
+           messages: Vec<ConsumedMessage>,       // the actual data!            
+       ) -> Result<(), Error>;                                                  
+                                                                                
+       async fn close(&mut self) -> Result<(), Error>;                          
+   }                                                                            
+                                                                                
+  Key insight: open and close take &mut self (exclusive access), but consume    
+takes &self (shared). The runtime can call consume concurrently after setup. -- 
+ without writing on any file just here with ASCII diagrams                      
+
+⏺ eli5-ascii-explainer(ASCII explain Sink trait borrowing)
+  ⎿  Done (0 tool uses · 23.9k tokens · 2m 16s)
+  (ctrl+o to expand)
+
+⏺ The Sink Trait: A Masterclass in Rust Concurrency Design
+
+  ---
+  Layer 0 -- ELI5: The Theater Metaphor
+
+  ONE stagehand sets up the stage alone. Once the curtain rises, MANY actors 
+  perform simultaneously. ONE stagehand tears it down alone.
+
+      ACT I: SETUP              ACT II: THE SHOW           ACT III: TEARDOWN
+      (&mut self)                (&self)                    (&mut self)
+
+     ONE stagehand             MANY actors at once         ONE stagehand
+     sets up alone             share the stage             cleans up alone
+
+    ┌─────────────┐     ┌─────────────────────────┐     ┌─────────────┐
+    │  ┌───────┐  │     │  O    O    O    O    O  │     │  ┌───────┐  │
+    │  │ open()│  │     │ /|\  /|\  /|\  /|\  /|\ │     │  │close()│  │
+    │  │       │  │     │ / \  / \  / \  / \  / \ │     │  │       │  │
+    │  │  ONE  │  │     │                         │     │  │  ONE  │  │
+    │  │PERSON │  │     │   consume() x N         │     │  │PERSON │  │
+    │  └───────┘  │     │   ALL AT THE SAME TIME  │     │  └───────┘  │
+    └─────────────┘     └─────────────────────────┘     └─────────────┘
+          |                        |                          |
+     "No one else          "Everyone can read           "No one else
+      touch anything!"      the script together"         touch anything!"
+
+  ---
+  Layer 1 -- The Borrow Checker's View
+
+  Rust's fundamental law: either ONE writer or MANY readers. Never both.
+
+    TIMELINE OF BORROW STATES
+
+    Time ──────────────────────────────────────────────────────▶
+
+    Phase:   OPEN            CONSUME CONSUME CONSUME      CLOSE
+             (&mut self)     (&self) (&self) (&self)      (&mut self)
+
+             ┌─────┐
+    &mut ────┤LOCK │──────────────────────────────────────┌─────┐
+             └─────┘                                      │LOCK │
+                                                          └─────┘
+                       ┌────┐ ┌────┐ ┌────┐
+    &self ─────────────┤ ok ├─┤ ok ├─┤ ok ├───────────────────────
+                       └────┘ └────┘ └────┘
+                       ▲             ▲
+                       └─ these can OVERLAP ─┘
+
+    METHOD-BY-METHOD BREAKDOWN
+
+    ┌─────────────────────────────────────────────────────┐
+    │  async fn open(&mut self)                           │
+    │  "I need EXCLUSIVE access to set things up"         │
+    │  - Initialize connection pools                      │
+    │  - Write to self.connection = Some(conn)            │
+    │  Borrow: &mut self  =  ONE caller, NO concurrency  │
+    └─────────────────────────────────────────────────────┘
+                            │
+                            ▼
+    ┌─────────────────────────────────────────────────────┐
+    │  async fn consume(&self, ...)                       │
+    │  "I only need to READ my config and push data"      │
+    │  - Read from self.pool (already initialized)        │
+    │  - Any mutation goes through interior mutability    │
+    │  Borrow: &self  =  MANY callers, FULL concurrency  │
+    └─────────────────────────────────────────────────────┘
+                            │
+                            ▼
+    ┌─────────────────────────────────────────────────────┐
+    │  async fn close(&mut self)                          │
+    │  "I need EXCLUSIVE access to tear things down"      │
+    │  - Flush buffers, close connections                 │
+    │  Borrow: &mut self  =  ONE caller, NO concurrency  │
+    └─────────────────────────────────────────────────────┘
+
+  ---
+  Layer 2 -- What This Enables in Practice
+
+    HOW THE IGGY RUNTIME EXPLOITS THIS
+
+    Step 1: SETUP (sequential, exclusive)
+
+    Runtime Task
+        │
+        ▼
+    ┌────────────────────┐
+    │  sink.open().await  │ <── only one task holds &mut
+    └────────────────────┘
+        │  open() completes, &mut is released
+        ▼
+
+    Step 2: PROCESSING (concurrent, shared)
+
+    ┌──────────────────────────────────────────────┐
+    │   tokio::spawn  tokio::spawn  tokio::spawn   │
+    │       │              │              │        │
+    │       ▼              ▼              ▼        │
+    │   ┌────────┐    ┌────────┐    ┌────────┐    │
+    │   │Task #1 │    │Task #2 │    │Task #3 │    │
+    │   │consume │    │consume │    │consume │    │
+    │   │(&self) │    │(&self) │    │(&self) │    │
+    │   └───┬────┘    └───┬────┘    └───┬────┘    │
+    │       └──────┐      │      ┌──────┘         │
+    │              ▼      ▼      ▼                │
+    │         ┌─────────────────────┐             │
+    │         │     SAME Sink       │             │
+    │         │     instance        │             │
+    │         │  (shared via &self) │             │
+    │         └─────────────────────┘             │
+    │   ALL THREE RUN AT THE SAME TIME!           │
+    └──────────────────────────────────────────────┘
+
+    Step 3: TEARDOWN (sequential, exclusive)
+
+    ┌─────────────────────┐
+    │  sink.close().await  │ <── only one task holds &mut
+    └─────────────────────┘
+
+  ---
+  Layer 3 -- The Interior Mutability Dance
+
+  Since consume(&self) forbids direct mutation, anything that changes during
+  consume uses special types:
+
+    ┌──────────────────┐       ┌──────────────────────┐
+    │  What you WANT   │  ──▶  │  What you USE         │
+    ├──────────────────┤       ├──────────────────────┤
+    │  Increment count │       │  AtomicU64            │
+    │  Mutate state    │       │  Arc<Mutex<T>>        │
+    │  Shared DB pool  │       │  Pool<Postgres>       │
+    │                  │       │  (internally Arc'd)   │
+    │  Append buffer   │       │  Mutex<Vec<u8>>       │
+    └──────────────────┘       └──────────────────────┘
+
+  Three tasks calling consume() simultaneously:
+
+    ┌───────────────────────────────────────────────────┐
+    │                PostgresSink                       │
+    │                                                   │
+    │  pool: Pool<Postgres>                             │
+    │  ┌────────────────────────────────────────┐       │
+    │  │  Arc<SharedPool>  (ref count = 3)      │       │
+    │  │                                        │       │
+    │  │  Task1 ──▶ conn #1 ──▶ INSERT INTO..  │       │
+    │  │  Task2 ──▶ conn #2 ──▶ INSERT INTO..  │       │
+    │  │  Task3 ──▶ conn #3 ──▶ INSERT INTO..  │       │
+    │  │           ▲                            │       │
+    │  │           └─ each gets its OWN conn    │       │
+    │  └────────────────────────────────────────┘       │
+    │                                                   │
+    │  counter: AtomicU64                               │
+    │  ┌────────────────────────────────────────┐       │
+    │  │  Task1: fetch_add(batch_size) ─┐       │       │
+    │  │  Task2: fetch_add(batch_size) ─┼─ all  │       │
+    │  │  Task3: fetch_add(batch_size) ─┘  safe │       │
+    │  │         no lock needed!                │       │
+    │  └────────────────────────────────────────┘       │
+    └───────────────────────────────────────────────────┘
+
+  ---
+  Layer 4 -- Why Not Just &mut self Everywhere?
+
+    If consume(&mut self):              With consume(&self):
+    (SERIALIZED - SLOW)                 (PARALLEL - FAST)
+
+    Time ──────────────────▶            Time ──────────────────▶
+
+    Task 1: ██████████░░░░░░░░░░        Task 1: ██████████
+    Task 2: ░░░░░░░░░░██████████        Task 2: ██████████
+    Task 3: ░░░░░░░░░░░░░░░░░░░░████    Task 3: ██████████
+
+    Total:  30 seconds (3 x 10s)        Total:  10 seconds (all parallel!)
+
+
+    ┌─────────────────────────────┐  ┌─────────────────────────────┐
+    │  ANTI-PATTERN               │  │  THE SINK PATTERN           │
+    │  consume(&mut self)         │  │  consume(&self)             │
+    │                             │  │                             │
+    │  ┌──────┐                   │  │  ┌──────┐                   │
+    │  │ Task │──┐                │  │  │ Task │──┐                │
+    │  └──────┘  │                │  │  └──────┘  │                │
+    │  ┌──────┐  │  ┌──────────┐  │  │  ┌──────┐  ├──▶┌─────────┐ │
+    │  │ Task │──┼─▶│ Mutex<   │  │  │  │ Task │──┤   │  Sink   │ │
+    │  └──────┘  │  │  Sink>   │  │  │  └──────┘  │   │  (&self)│ │
+    │  ┌──────┐  │  └──────────┘  │  │  ┌──────┐  ├──▶│         │ │
+    │  │ Task │──┘     funnel     │  │  │ Task │──┘   └─────────┘ │
+    │  └──────┘                   │  │  └──────┘     fan-in,      │
+    │                             │  │               parallel     │
+    │  One at a time              │  │  All at once               │
+    │  Mutex contention           │  │  No outer lock             │
+    └─────────────────────────────┘  └─────────────────────────────┘
+
+  ---
+  Layer 5 -- The Send + Sync Bounds
+
+    trait Sink: Send + Sync
+                ────   ────
+                 │       │
+                 ▼       ▼
+    ┌──────────────────────────┐   ┌──────────────────────────┐
+    │  Send enables:           │   │  Sync enables:           │
+    │                          │   │                          │
+    │  tokio::spawn(async {    │   │  task1: sink.consume()   │
+    │    sink.open().await     │   │  task2: sink.consume()   │
+    │  })                      │   │  task3: sink.consume()   │
+    │                          │   │                          │
+    │  Sink MOVED across       │   │  &self SHARED across     │
+    │  threads                 │   │  threads simultaneously  │
+    └──────────────────────────┘   └──────────────────────────┘
+
+
+    What breaks without Sync:
+
+    struct BrokenSink {
+        cache: RefCell<HashMap<...>>,   // RefCell is !Sync
+    }
+
+    Thread A        Thread B
+       │               │
+       ▼               ▼
+    borrow_mut()    borrow_mut()   <── BOTH at once!
+       │               │                RACE CONDITION!
+       └───────┬───────┘                RefCell uses a plain
+               ▼                        integer, not an atomic
+         ╳ COMPILE ERROR
+
+    Fix:  RefCell<T>  ──▶  Mutex<T>    (Sync-safe)
+          Cell<T>     ──▶  AtomicU64   (Sync-safe)
+          Rc<T>       ──▶  Arc<T>      (Sync-safe)
+
+  ---
+  The One-Line Summary
+
+  ▎ The &mut self / &self split encodes the lifecycle state machine into the 
+  type system -- setup and teardown are single-threaded by compile-time 
+  guarantee, while the hot path (consume) scales to N concurrent tasks with zero
+   external locking. This is Rust's borrow checker turning concurrency bugs into
+   compile errors.
+
+✻ Worked for 3m 38s
+
+❯ This is not good enough because it assumes I understand Rust syntax - I       
+FUCKING DO NOT - so redo this and also walk me through code pieces 1 by 1 who   
+calls who @"eli5-ascii-explainer (agent)"                                       
+
+⏺ eli5-ascii-explainer(ELI5 Sink trait zero Rust knowledge)
+  ⎿  Done (8 tool uses · 61.9k tokens · 4m 1s)
+  (ctrl+o to expand)
+
+⏺ Here's the full redo -- zero Rust knowledge assumed, every keyword explained,
+  every call chain traced.
+
+  ---
+  The Iggy Sink Connector System -- From Zero to Hero
+
+  ---
+  PART 1: What Is This Whole Thing? (No Code, Pure Metaphor)
+
+  Imagine a post office that never stops receiving letters.
+
+     SENDERS                  POST OFFICE              RECIPIENTS
+    (Websites,               (Iggy Server)            (Databases,
+     IoT devices,                                      Dashboards,
+     Apps...)                                          Files...)
+
+    ┌─────────┐            ┌─────────────┐           ┌─────────┐
+    │ Sensor  │──letter──> │             │──letter──> │Postgres │
+    └─────────┘            │   MAILROOM  │           └─────────┘
+    ┌─────────┐            │             │           ┌─────────┐
+    │  App    │──letter──> │  (streams   │──letter──> │ Screen  │
+    └─────────┘            │   of mail)  │           │ (stdout) │
+    ┌─────────┐            │             │           └─────────┘
+    │ Website │──letter──> │             │──letter──> │  File   │
+    └─────────┘            └─────────────┘           └─────────┘
+
+  Iggy is the post office. It receives messages (letters) and holds them until
+  someone picks them up.
+
+  A Sink Connector is a delivery worker. Its only job: pick up batches of
+  letters and deliver them somewhere specific -- a database, a screen, a file.
+
+    The post office doesn't care WHERE letters go.
+    It just says:
+
+    "Hey delivery worker, here are 50 letters.
+     Do whatever you want with them."
+
+    ┌──────────────┐
+    │  IGGY SERVER │
+    │  (the post   │──── batch of 50 ────┐
+    │   office)    │     letters          │
+    └──────────────┘                      v
+                                ┌──────────────────┐
+                                │  SINK CONNECTOR   │
+                                │  (delivery worker)│
+                                │                   │
+                                │  "I know where    │
+                                │   these go!"      │
+                                └────────┬──────────┘
+                                         │
+                                Delivers to Postgres,
+                                or stdout, or wherever
+
+  ---
+  PART 2: The Contract -- What Every Delivery Worker Must Promise
+
+  Before we see ANY code, here's the dictionary:
+
+   RUST WORD/SYMBOL         PLAIN ENGLISH
+   ==================       ============================
+   trait                     A contract. A promise sheet.
+                             "Anyone who signs this MUST
+                              have these abilities."
+
+   async                     "This might need to wait."
+                             Like ordering food -- you
+                             place the order, then wait.
+
+   fn                        Short for "function." A named
+                             action. Like a recipe card.
+
+   &mut self                 "Give me EXCLUSIVE access to
+                             myself. Lock the door. Nobody
+                             else can touch me right now."
+
+   &self                     "Give me SHARED access. Others
+                             can look at me too, but nobody
+                             can change me."
+
+   Result<(), Error>         "This either works (gives back
+                             nothing useful) or fails (gives
+                             back an error message)."
+
+   Vec<ConsumedMessage>      "A list of consumed messages."
+                             Vec = list. Like a stack of
+                             letters bundled together.
+
+   Send + Sync               "Safe to hand to multiple
+                             workers at the same time."
+
+   pub                       "Public." Anyone can see this.
+                             Like an open sign on a shop.
+
+  Now, line by line:
+
+  Line 1 -- pub trait Sink: Send + Sync {
+
+  In English: "This is a public contract called Sink. Anyone signing it must be
+  safe for parallel workers."
+
+    ┌─────────────────────────────────────┐
+    │    CONTRACT: "Sink"                 │
+    │                                     │
+    │    Requirements:                    │
+    │    - Safe for parallel work         │
+    │                                     │
+    │    You MUST provide:                │
+    │    1. open()    -- setup            │
+    │    2. consume() -- do your job      │
+    │    3. close()   -- cleanup          │
+    └─────────────────────────────────────┘
+
+  Line 2 -- async fn open(&mut self) -> Result<(), Error>;
+
+  In English: "A function called open that might need to wait. It gets exclusive
+   access to itself (nobody else can touch it). It either succeeds or fails with
+   an error."
+
+    open() = MORNING ROUTINE:
+
+    ┌──────────────────────────────────┐
+    │  ALONE IN THE LOCKER ROOM       │
+    │  (&mut self = exclusive access)  │
+    │                                  │
+    │  - Put on uniform                │
+    │  - Check the delivery truck      │
+    │  - Connect to the GPS            │
+    │                                  │
+    │  Can FAIL: truck won't start!    │
+    └──────────────────────────────────┘
+       Called ONCE at startup
+
+  Lines 3-4 -- the consume function:
+
+      async fn consume(
+          &self,                          // shared access -- others CAN look
+          topic_metadata: &TopicMetadata, // "from stream X, topic Y"
+          messages_metadata: MessagesMetadata, // partition, offset
+          messages: Vec<ConsumedMessage>, // the actual list of letters
+      ) -> Result<(), Error>;
+
+  In English: "A function called consume that might need to wait. It gets shared
+   access (others can use the sink at the same time). It receives info about
+  where the messages came from, plus the actual list of messages. It either
+  succeeds or fails."
+
+    consume() = THE ACTUAL DELIVERY:
+
+    ┌──────────────────────────────────────┐
+    │  ON THE JOB  (&self = shared)        │
+    │                                      │
+    │  Receives:                           │
+    │  ┌────────────────┐                  │
+    │  │ topic_metadata │ "From: stream X, │
+    │  │                │  topic Y"        │
+    │  └────────────────┘                  │
+    │  ┌────────────────┐                  │
+    │  │ messages       │ [letter, letter, │
+    │  │ (a list)       │  letter, ...]    │
+    │  └────────────────┘                  │
+    │                                      │
+    │  Does: delivers them somewhere       │
+    └──────────────────────────────────────┘
+       Called MANY TIMES (every batch)
+
+  Line 5 -- async fn close(&mut self) -> Result<(), Error>;
+
+  In English: "A function called close. Exclusive access again. Cleanup time."
+
+    close() = END-OF-DAY ROUTINE:
+
+    ┌──────────────────────────────────┐
+    │  ALONE AGAIN                     │
+    │  (&mut self = exclusive)         │
+    │                                  │
+    │  - Park the truck                │
+    │  - Return the keys               │
+    │  - Close the garage              │
+    └──────────────────────────────────┘
+       Called ONCE at shutdown
+
+  The Lifecycle:
+
+    TIME ─────────────────────────────────────────────>
+
+    ┌─────────┐   ┌──────────────────────────┐   ┌─────────┐
+    │  open() │   │       consume()          │   │ close() │
+    │         │   │  consume()  consume()    │   │         │
+    │ ALONE   │   │    consume()   consume() │   │ ALONE   │
+    │         │   │                          │   │         │
+    │ Setup!  │   │ Many batches in parallel │   │Cleanup! │
+    └─────────┘   └──────────────────────────┘   └─────────┘
+       ONCE              MANY TIMES                 ONCE
+
+  ---
+  PART 3: The Simplest Sink -- stdout_sink (Just Print to Screen)
+
+  Line 1: sink_connector!(StdoutSink);
+
+  In English: "Hey Iggy, register me as a delivery worker named StdoutSink.
+  Auto-generate all the boring paperwork for me."
+
+  This one line auto-creates 4 entry points the runtime needs. More on this in
+  Part 6.
+
+  The worker's "locker":
+
+  pub struct StdoutSink {
+      id: u32,              // badge number
+      print_payload: bool,  // print letter contents? yes/no
+      state: Mutex<State>,  // a locked counter
+  }
+
+  In English: "struct" means "a bundle of named data" -- like a form with
+  fields. This worker carries a badge number, a yes/no setting, and a locked
+  counter.
+
+  Mutex means "one-at-a-time lock" -- like a bathroom door. Only one person can
+  update the counter at a time.
+
+    ┌────────────────────────────────────┐
+    │  StdoutSink                        │
+    │  ┌──────────────┬────────────────┐ │
+    │  │ id: 7        │ badge number   │ │
+    │  ├──────────────┼────────────────┤ │
+    │  │print_payload │ print letters? │ │
+    │  │   true/false │ yes or no      │ │
+    │  ├──────────────┼────────────────┤ │
+    │  │ state        │ how many times │ │
+    │  │ (locked)     │ called so far  │ │
+    │  └──────────────┴────────────────┘ │
+    └────────────────────────────────────┘
+
+  open() -- nothing to do:
+
+  async fn open(&mut self) -> Result<(), Error> {
+      info!("Opened stdout sink connector with ID: {}...", self.id);
+      Ok(())
+  }
+
+  In English: info!(...) = print a log message. Ok(()) = "success, nothing to
+  report." That's it -- printing to screen needs no setup.
+
+  consume() -- the real work, piece by piece:
+
+  Piece 1: Lock the counter, add 1, unlock.
+
+  let mut state = self.state.lock().await;  // wait for the lock
+  state.invocations_count += 1;             // add 1
+  let invocation = state.invocations_count; // save the number
+  drop(state);                              // release the lock
+
+    ┌──────────────────────────────────────┐
+    │  "Let me grab the counter..."        │
+    │  Counter was: 41  →  Counter now: 42 │
+    │  "OK, releasing the counter."        │
+    └──────────────────────────────────────┘
+
+  Piece 2: Print summary + optionally print each letter.
+
+  if self.print_payload {
+      for message in messages {     // "for each letter in the stack"
+          info!("Message offset: {}, payload: {:#?}", message.offset,
+  message.payload);
+      }
+  }
+  Ok(())   // "everything went fine"
+
+    50 messages arrive
+         │
+         v
+    Lock counter, add 1, unlock
+         │
+         v
+    Print: "Got 50 msgs from stream X"
+         │
+         v
+    print_payload == true?
+       │          │
+      YES         NO
+       │          │
+       v          v
+    Print each   Done!
+    message
+
+  close() -- just say goodbye:
+
+  async fn close(&mut self) -> Result<(), Error> {
+      info!("Stdout sink connector with ID: {} is closed.", self.id);
+      Ok(())
+  }
+
+  ---
+  PART 4: A Real-World Sink -- postgres_sink
+
+         StdoutSink                  PostgresSink
+    ┌──────────────────┐       ┌──────────────────────┐
+    │ open():           │       │ open():               │
+    │   Log "I'm here" │       │   Connect to database │
+    │   (instant)      │       │   Test connection     │
+    │                  │       │   Create table        │
+    ├──────────────────┤       ├──────────────────────┤
+    │ consume():       │       │ consume():            │
+    │   Print to screen│       │   Build SQL INSERT    │
+    │                  │       │   Execute with retry  │
+    ├──────────────────┤       ├──────────────────────┤
+    │ close():         │       │ close():              │
+    │   Log "bye"      │       │   Close connections   │
+    ├──────────────────┤       ├──────────────────────┤
+    │   ~30 lines      │       │   ~300 lines          │
+    └──────────────────┘       └──────────────────────┘
+
+  open() -- the morning routine is bigger:
+
+    Step 1: Connect to database
+    ┌──────────┐    "Hello, is    ┌──────────┐
+    │  Sink    │───this Postgres?──>│ Database │
+    │          │<──"Yes, welcome"───│          │
+    └──────────┘                   └──────────┘
+
+    Step 2: Test the connection
+    ┌──────────┐    "SELECT 1"    ┌──────────┐
+    │  Sink    │────────────────> │ Database │
+    │          │<───"1"────────── │          │
+    └──────────┘                  └──────────┘
+
+    Step 3: Create table if needed
+    ┌──────────┐  "CREATE TABLE   ┌──────────┐
+    │  Sink    │──IF NOT EXISTS"─>│ Database │
+    │          │<──"Done"──────── │          │
+    └──────────┘                  └──────────┘
+
+  In the code: self.connect().await?; -- the ? means "if this fails, STOP 
+  immediately and return the error." Like: "If the truck won't start, don't
+  attempt deliveries."
+
+  consume() -- inserting rows:
+
+    50 messages arrive
+           │
+           v
+    Split into batches of 100 (or fewer)
+           │
+           v
+    Build SQL: INSERT INTO "messages"
+               (id, offset, timestamp, ...)
+               VALUES ($1, $2, ..., $9)
+           │
+           v
+    Execute!
+           │
+      ┌────┴────┐
+    Success?   Failed?
+      │           │
+      v        Temporary?
+    Update      │      │
+    counter    YES     NO
+               │      │
+               v      v
+            Wait 1s, Give up
+            retry
+
+  The pool -- the pool field is like having 10 phone lines to the database
+  instead of 1. If one line is busy, another handles the next batch.
+
+  ---
+  PART 5: Who Calls Who? -- The FULL Call Chain
+
+    Step 1    main()
+      │       The program starts. Loads config.toml.
+      │
+      v
+    Step 2    stream::init()
+      │       Connects to the Iggy server.
+      │
+      v
+    Step 3    sink::init()
+      │       For EACH sink in the config:
+      │
+      v
+    Step 4    resolve_plugin_path("my_sink")
+      │       Finds the .so/.dylib file on disk.
+      │       (Like finding an app's installer)
+      │
+      v
+    Step 5    Container::load(&path)
+      │       Loads the plugin file into memory.
+      │       (Like installing an app)
+      │
+      v
+    Step 6    iggy_sink_open()
+      │       Calls the plugin's "open" door.
+      │       Inside: YourSink::new() then YourSink::open()
+      │
+      v
+    Step 7    setup_sink_consumers()
+      │       Creates Iggy consumers -- one per
+      │       stream+topic pair. Each knows which
+      │       mailbox to watch.
+      │
+      v
+    Step 8    spawn_consume_tasks()
+      │       Creates background loops that run forever.
+      │
+      v
+    Step 9    consume_messages()  [INFINITE LOOP]
+      │       Sits in a loop:
+      │         ├─ Wait for next message from Iggy
+      │         ├─ Add to batch
+      │         ├─ Batch full? ──> process_messages()
+      │         └─ Repeat
+      │
+      v
+    Step 10   process_messages()
+      │       For each message:
+      │         1. Decode raw bytes into readable data
+      │         2. Run transforms (optional filters)
+      │         3. Re-encode for the plugin boundary
+      │
+      v
+    Step 11   iggy_sink_consume()  [crosses to plugin side]
+      │       The auto-generated entry point.
+      │       Decodes binary data back.
+      │
+      v
+    Step 12   SinkContainer::consume()
+      │       Unpacks: topic info, message info, messages
+      │
+      v
+    Step 13   YourSink::consume()   ◀── YOUR CODE RUNS HERE!
+              (StdoutSink prints, PostgresSink INSERTs)
+
+  The two sides talking:
+
+    RUNTIME SIDE                  PLUGIN SIDE
+    (the manager)                 (your sink code)
+
+    Load .so file ─────────┐
+                            │
+                       ┌────v──────────────────┐
+                       │ iggy_sink_open()       │
+                       │   └─> new() + open()   │
+                       └────┬──────────────────┘
+                            │
+    "OK, they're ready" <───┘
+
+    Start polling Iggy...
+
+    Got 50 messages!
+      ├─ Decode them
+      ├─ Run transforms
+      ├─ Re-encode to binary
+      └─ Call consume ──────┐
+                            │
+                       ┌────v──────────────────┐
+                       │   your consume()       │
+                       └────┬──────────────────┘
+                            │
+    "OK, done" <────────────┘
+
+    (repeat forever until shutdown)
+
+    Shutdown signal!
+      └─ Call close ────────┐
+                       ┌────v──────────────────┐
+                       │   your close()         │
+                       └────┬──────────────────┘
+                            │
+    "Goodbye" <─────────────┘
+
+  ---
+  PART 6: The Plugin Loading Magic
+
+  Why Plugins?
+
+  You run a food delivery company. You do NOT build a new kitchen for every
+  restaurant. Each restaurant is separate, with a standardized pickup window:
+
+    YOUR DELIVERY COMPANY          RESTAURANTS
+    (Iggy Runtime)                 (sink plugins)
+
+    ┌─────────────────┐
+    │  "I just go to  │           ┌──────────────┐
+    │   the standard  │────┐     │ Pizza Place  │
+    │   pickup window │    ├────>│ (stdout_sink)│
+    │   and say:      │    │     │  Standard    │
+    │   'Order ready?'│    │     │  window      │
+    │                 │    │     └──────────────┘
+    │   Each kitchen  │    │
+    │   is different  │    │     ┌──────────────┐
+    │   inside, but   │    └────>│ Sushi Bar    │
+    │   the WINDOW    │         │(postgres_sink)│
+    │   is the same." │         │  Standard    │
+    └─────────────────┘         │  window      │
+                                └──────────────┘
+
+  The "standard window" is a shared library file (.so on Linux, .dylib on Mac,
+  .dll on Windows).
+
+  The sink_connector! Macro -- The Auto-Fill Robot
+
+  That one line sink_connector!(StdoutSink); is a code-writing robot. You give
+  it one name, it writes a whole page of boring glue code:
+
+    sink_connector!(StdoutSink) generates:
+
+    1. A dictionary of all running instances:
+       INSTANCES: { id → SinkContainer }
+
+    2. iggy_sink_open(id, config, ...)
+       "Create instance, call open(), store it"
+
+    3. iggy_sink_consume(id, data...)
+       "Look up instance by ID, decode data,
+        call instance.consume()"
+
+    4. iggy_sink_close(id)
+       "Remove instance, call close()"
+
+    5. iggy_sink_version()
+       "Return version string"
+
+  The FFI Boundary -- Two Diplomats With a Translator
+
+  The runtime and plugin are compiled separately. They exchange data through a
+  translator that speaks only in numbers and memory addresses:
+
+    RUNTIME                 TRANSLATOR              PLUGIN
+    "Here are 50       ┌──────────────────┐
+     messages from      │ Encode to binary │
+     stream 'orders'"   │ (postcard format)│     "Received
+          │             │                  │      binary data"
+          └────────────>│  Pass memory     │────────>│
+                        │  addresses       │         │
+                        └──────────────────┘         v
+                                                "Decode from
+                                                 binary:
+                                                 50 messages
+                                                 from orders!"
+
+  ---
+  PART 7: The &mut vs & Trick -- WHY It Matters
+
+  The Whiteboard Analogy
+
+  Setup (&mut self = exclusive): Someone is DRAWING columns on a whiteboard.
+  Everyone else stays back.
+
+    ┌────────────────────────────────┐
+    │          WHITEBOARD            │
+    │     O  "I'm drawing.          │
+    │    /|\ Everyone STAY BACK."   │
+    │    / \                        │
+    │         X  X  X  <-- waiting  │
+    └────────────────────────────────┘
+
+  Work (&self = shared): Whiteboard is ready. EVERYONE reads it at the same
+  time.
+
+    ┌────────────────────────────────┐
+    │          WHITEBOARD            │
+    │  ┌──────┬──────┬──────┐       │
+    │  │ Name │ Task │ Done │       │
+    │  └──────┴──────┴──────┘       │
+    │  O  O  O  O  O  <-- everyone  │
+    │  reading at the same time     │
+    └────────────────────────────────┘
+
+  Cleanup (&mut self = exclusive): One person erases. Everyone else stays back.
+
+  WHY this makes things fast:
+
+    WITH &self (shared -- what Iggy uses):
+
+    Batch 1: ████████████████
+    Batch 2:    ████████████████
+    Batch 3:       ████████████████
+                                     Total: FAST!
+
+    WITHOUT (exclusive -- if Iggy did it wrong):
+
+    Batch 1: ████████████████
+    Batch 2:                 ████████████████
+    Batch 3:                                 ████████████████
+                                     Total: 3x SLOWER!
+
+  99.9% of the work (building SQL, executing queries, printing) is lock-free.
+  Only the tiny counter needs a lock for microseconds.
+
+    ┌──────────────────────────────────────┐
+    │  PostgresSink with &self (shared)    │
+    │                                      │
+    │  pool, config ── read-only, shared   │
+    │  (99.9% of the work happens here)    │
+    │                                      │
+    │  counter ── locked for microseconds  │
+    │  (0.1% of the work)                  │
+    │                                      │
+    │  = FAST PARALLEL PROCESSING          │
+    └──────────────────────────────────────┘
+
+  ---
+  Quick Reference Card
+
+    ┌─────────────────────────────────────────────┐
+    │  IGGY SINK CONNECTOR -- CHEAT SHEET         │
+    │                                             │
+    │  THE CONTRACT (3 functions):                │
+    │  open()    -- setup,   exclusive, once      │
+    │  consume() -- work,    shared,    many      │
+    │  close()   -- cleanup, exclusive, once      │
+    │                                             │
+    │  TO WRITE A NEW SINK:                       │
+    │  1. Create a struct with your fields        │
+    │  2. Write new(id, config)                   │
+    │  3. Implement: open, consume, close         │
+    │  4. Add: sink_connector!(YourSink);         │
+    │  5. Compile as shared library (.so/.dylib)  │
+    │  6. Point the runtime config at it          │
+    └─────────────────────────────────────────────┘
+
+✻ Worked for 7m 2s
+
+❯ @"eli5-ascii-explainer (agent)" I never understood why    &mut self  - vs say 
+ mutable ownership -- can you draw ASCII diagrams to cover comprehensively all  
+variations of this and tell when and when not to use each                       
+
+⏺ eli5-ascii-explainer(ELI5 all Rust self/ownership variants)
+  ⎿  Done (3 tool uses · 33.7k tokens · 3m 59s)
+  (ctrl+o to expand)
+⏺ Rust's self Variations -- The Complete Guide (Zero Rust Knowledge Required)
+
+  The One Metaphor: YOUR BOOK
+
+  Every variation of self is about what happens to your book when you hand it to
+   someone.
+
+  ---
+  Variation 1: self -- "Take my book. It's yours now."
+
+  You hand your book to someone. They keep it. You no longer have a book.
+
+    BEFORE                    DURING                   AFTER
+
+    ┌─────┐                 ┌─────┐
+    │ YOU │  "Here, take   │THEM │  "Thanks,       ┌─────┐
+    │     │   my book."    │     │   I'll keep it" │ YOU │
+    │ [📖]│───────────────>│ [📖]│                 │     │
+    └─────┘                └─────┘                 │ [ ] │ EMPTY!
+                                                    └─────┘
+    You HAD a book.        They USE it.            You have NOTHING.
+                                                    Touch it? ERROR.
+
+  fn destroy(self) { ... }
+  //         ^^^^
+  // "self" with no & means: give me the whole thing.
+  // After this call, the original is GONE.
+
+  Keyword by keyword:
+  - fn = function (a named action)
+  - self = "the object itself" -- not a reference, the ACTUAL thing
+  - After calling this, the object is consumed. Dead. Gone.
+
+  When to use: Conversion functions ("turn yourself into something else"),
+  one-shot operations ("fire and forget"), builder patterns ("finalize and
+  return the result").
+
+  When NOT to use: When you need the object again later.
+
+  ---
+  Variation 2: mut self -- "Take my book AND scribble in it. It's yours."
+
+  Same as self, but the receiver is allowed to modify it before consuming it.
+
+    BEFORE                    DURING                   AFTER
+
+    ┌─────┐                 ┌─────┐
+    │ YOU │  "Here, take   │THEM │  "I'll write    ┌─────┐
+    │     │   my book."    │     │   in it, then   │ YOU │
+    │ [📖]│───────────────>│ [📖✏️]│  keep it."     │     │
+    └─────┘                └─────┘                 │ [ ] │ EMPTY!
+                                                    └─────┘
+
+  fn consume_and_modify(mut self) { ... }
+  //                    ^^^^^^^^
+  // "mut" = I'm allowed to change it
+  // "self" = I own it now (original is gone)
+
+  Keyword by keyword:
+  - mut = "mutable" = "changeable" = I can modify this
+  - self = the actual object (not a reference)
+
+  When to use: Builder pattern -- you chain modifications then finalize:
+  Button::new()          // create it       (no self)
+      .label("Click me") // modify + return (mut self)
+      .color("red")      // modify + return (mut self)
+      .build()           // finalize        (self -- consumed)
+
+  When NOT to use: When you still need the object after the call.
+
+  ---
+  Variation 3: &self -- "Read my book over my shoulder. MANY people can read at 
+  once."
+
+  You let someone look at your book. You still own it. They cannot write in it.
+  Multiple people can read simultaneously.
+
+    BEFORE                    DURING                   AFTER
+
+    ┌─────┐                 ┌─────┐                 ┌─────┐
+    │ YOU │  "Look, but    │ YOU │  O O O          │ YOU │
+    │     │   don't touch" │     │  │ │ │ reading  │     │
+    │ [📖]│               │ [📖]│◄─┘ │ │          │ [📖]│
+    └─────┘               └─────┘    │ │          └─────┘
+                            Still     │ │
+                            YOURS!    └─┘ Many     STILL yours!
+                                      can look     Nothing changed.
+
+  fn read_title(&self) -> String { ... }
+  //            ^^^^^
+  // & = "reference" = I'm just LOOKING, not taking
+  // self = at myself
+  // Combined: "a shared, read-only peek at myself"
+
+  Keyword by keyword:
+  - & = "reference" = a pointer/peek, NOT the actual thing
+  - self = the object
+  - &self together = "let me look at myself without taking ownership"
+
+  When to use: Reading data, computing values, checking state. Anything that
+  does NOT change the object. This is the most common one.
+
+  When NOT to use: When you need to modify the object's fields.
+
+  ---
+  Variation 4: &mut self -- "Lend my book to ONE person. They can write in it. 
+  They MUST give it back."
+
+  You lend your book to exactly ONE person. They can write notes in it. But they
+   MUST return it. Nobody else can touch it while they have it.
+
+    BEFORE                    DURING                   AFTER
+
+    ┌─────┐                 ┌─────┐                 ┌─────┐
+    │ YOU │  "Here, you    │THEM │  "I'm writing   │ YOU │
+    │     │   can write    │     │   in it. Nobody  │     │
+    │ [📖]│──────lend─────>│ [📖✏️]│  else touch!"   │ [📖]│
+    └─────┘                └─────┘                 └─────┘
+    You WAIT.              ONE person.              Book is BACK!
+    Can't use it.          Exclusive.               (with changes)
+
+  fn set_name(&mut self, name: String) { ... }
+  //          ^^^^^^^^^
+  // & = reference (borrowing, not owning)
+  // mut = mutable (can change things)
+  // self = the object
+  // Combined: "lend me exclusive, writable access to myself"
+
+  Keyword by keyword:
+  - & = reference (borrowing -- will give it back)
+  - mut = mutable (allowed to change things)
+  - self = the object
+  - &mut self together = "exclusive, writable borrow that gets returned"
+
+  When to use: When you need to modify the object AND still use it afterward.
+  Setup methods, configuration, state changes.
+
+  When NOT to use: When you only need to read. Use &self instead -- it allows
+  parallelism.
+
+  ---
+  Variation 5: No self at all -- "I don't need a book. I AM the bookstore."
+
+  This is a function that belongs to the TYPE itself, not to any particular
+  instance. Like asking "How many books does the BookStore chain have?" vs "How
+  many pages does THIS book have?"
+
+    NO BOOK NEEDED
+
+    ┌────────────────────┐
+    │   BOOKSTORE (type) │
+    │                    │
+    │   BookStore::new() │  "I CREATE books.
+    │                    │   I don't NEED one
+    │   BookStore::count()│   to exist first."
+    └────────────────────┘
+
+  fn new(name: String) -> Self { ... }
+  // No self parameter at all!
+  // Called as: BookStore::new("My Store")
+  // Not as: my_store.new(...)
+
+  When to use: Constructors (new), factory methods, utility functions that
+  belong to a type but don't need an instance.
+
+  ---
+  Variation 6: Smart Pointers -- "The book is in a special case"
+
+  These are advanced. The book is wrapped in a container that provides extra
+  abilities.
+
+    Box<Self>     = Book in a locked box. Only ONE owner.
+                    Just like self, but the book is on a
+                    different shelf (heap memory).
+
+    Rc<Self>      = Book with a sign-out sheet. MULTIPLE
+                    owners, but only on ONE thread.
+                    When last person returns it, book is destroyed.
+
+    Arc<Self>     = Same as Rc, but the sign-out sheet is
+                    THREAD-SAFE. Multiple threads can own it.
+
+    Pin<&mut Self> = Book NAILED to the table. You can write
+                     in it, but you CANNOT move it. Used for
+                     async/await internals.
+
+    ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
+    │ Box<Self>│  │ Rc<Self> │  │Arc<Self> │  │Pin<&mut>│
+    │          │  │          │  │          │  │          │
+    │  ┌────┐  │  │  ┌────┐  │  │  ┌────┐  │  │  ┌────┐  │
+    │  │ 📖 │  │  │  │ 📖 │  │  │  │ 📖 │  │  │  │📌📖│  │
+    │  └────┘  │  │  └────┘  │  │  └────┘  │  │  └────┘  │
+    │ 1 owner  │  │ N owners │  │ N owners │  │ CAN'T   │
+    │ on heap  │  │ 1 thread │  │ N threads│  │ MOVE IT │
+    └──────────┘  └──────────┘  └──────────┘  └──────────┘
+
+  ---
+  MASTER COMPARISON TABLE
+
+   ┌──────────────┬───────────┬──────────┬───────────┬────────────┐
+   │  Variation   │ Ownership │ Can      │ Use after │ Parallel   │
+   │              │ transfer? │ modify?  │ call?     │ calls OK?  │
+   ├──────────────┼───────────┼──────────┼───────────┼────────────┤
+   │ self         │ YES       │ NO       │ NO ✗      │ N/A        │
+   │ (take it)    │ consumed  │ (read)   │ it's gone │            │
+   ├──────────────┼───────────┼──────────┼───────────┼────────────┤
+   │ mut self     │ YES       │ YES      │ NO ✗      │ N/A        │
+   │ (take+edit)  │ consumed  │ (write)  │ it's gone │            │
+   ├──────────────┼───────────┼──────────┼───────────┼────────────┤
+   │ &self        │ NO        │ NO       │ YES ✓     │ YES ✓      │
+   │ (peek)       │ borrowed  │ (read)   │ still yours│ many at   │
+   │              │           │          │           │ once       │
+   ├──────────────┼───────────┼──────────┼───────────┼────────────┤
+   │ &mut self    │ NO        │ YES      │ YES ✓     │ NO ✗       │
+   │ (lend+edit)  │ borrowed  │ (write)  │ comes back│ one at     │
+   │              │           │          │           │ a time     │
+   ├──────────────┼───────────┼──────────┼───────────┼────────────┤
+   │ (no self)    │ N/A       │ N/A      │ N/A       │ YES ✓      │
+   │ static fn    │ no object │          │           │            │
+   └──────────────┴───────────┴──────────┴───────────┴────────────┘
+
+  ---
+  DECISION FLOWCHART: "Which One Should I Use?"
+
+    START
+      │
+      v
+    Do you need an object instance?
+      │           │
+      NO          YES
+      │           │
+      v           v
+    (no self)   Do you need to MODIFY it?
+    static fn     │           │
+                  NO          YES
+                  │           │
+                  v           v
+                &self       Do you need it AFTER the call?
+               (shared       │           │
+                read)        NO          YES
+                             │           │
+                             v           v
+                          mut self     &mut self
+                          (take +      (exclusive
+                           modify +     borrow +
+                           consume)     modify +
+                                        return)
+
+  With speed consideration:
+
+    Will this function be called MANY times concurrently?
+      │           │
+      NO          YES
+      │           │
+      v           v
+    &mut self   &self
+    is fine     is REQUIRED for speed
+                (use interior mutability
+                 for any writes inside)
+
+  ---
+  WHY THE IGGY SINK TRAIT CHOSE WHAT IT CHOSE
+
+    METHOD       USES          WHY NOT THE ALTERNATIVES?
+    ──────────   ──────────    ─────────────────────────────
+
+    open()       &mut self     self would DESTROY the sink.
+                               Can't consume or close later!
+
+                               &self can't write the new
+                               database connection into itself.
+
+                               &mut self: modify + keep alive. ✓
+
+    consume()    &self         &mut self would force ONE batch
+                               at a time. SLOW. Like a single-
+                               lane highway.
+
+                               &self allows MANY batches in
+                               parallel. FAST. Multi-lane. ✓
+
+    close()      &mut self     self would destroy the sink
+                               immediately. The container
+                               couldn't inspect it or report
+                               status afterward.
+
+                               &self can't set connection=None
+                               or flush buffers (those are writes).
+
+                               &mut self: clean up + let container
+                               handle the rest. ✓
+
+  The visual timeline:
+
+    TIME ─────────────────────────────────────────────>
+
+    ┌──────────┐  ┌────────────────────────────┐  ┌──────────┐
+    │ open()   │  │       consume() x 1000     │  │ close()  │
+    │ &mut self│  │  &self  &self  &self  &self│  │ &mut self│
+    │          │  │                            │  │          │
+    │ ALONE    │  │ MANY IN PARALLEL = FAST    │  │ ALONE    │
+    │ writes   │  │ read-only = safe           │  │ writes   │
+    │ setup    │  │                            │  │ cleanup  │
+    └──────────┘  └────────────────────────────┘  └──────────┘
+     "Connect      "Deliver thousands of           "Disconnect
+      to DB"        batches simultaneously"          from DB"
+
+  ---
+  COMMON MISTAKES (In Plain English)
+
+  Mistake 1: Using the object after self consumed it
+    sink.destroy();    // self -- sink is consumed
+    sink.read();       // ERROR: "value used after move"
+                       //        "You gave it away! It's gone!"
+
+  Mistake 2: Trying to write in a &self method
+    fn read_only(&self) {
+        self.count = 5;  // ERROR: "cannot assign to field
+                         //        behind a & reference"
+                         // "You said read-only. Writing is cheating."
+    }
+
+  Mistake 3: Two &mut self borrows at the same time
+    let a = &mut book;
+    let b = &mut book;  // ERROR: "cannot borrow as mutable
+                         //        more than once"
+                         // "You lent the book to A. You can't
+                         //  also lend it to B simultaneously."
+
+  Mistake 4: &self and &mut self at the same time
+    let reader = &book;
+    let writer = &mut book;  // ERROR: "cannot borrow as mutable
+                              //        because it is also borrowed
+                              //        as immutable"
+                              // "Someone is reading! You can't let
+                              //  someone else write at the same time."
+
+✻ Sautéed for 5m 47s
