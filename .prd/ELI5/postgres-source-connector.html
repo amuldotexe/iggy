@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Iggy's Postgres Source Connector Actually Works</title>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+  :root {
+    --bg: #091018;
+    --bg-card: #111a24;
+    --bg-code: #0a121b;
+    --text: #d9e2ec;
+    --text-muted: #8ca0b3;
+    --text-bright: #f8fbff;
+    --accent-primary: #61dafb;
+    --accent-secondary: #f59e0b;
+    --accent-highlight: #34d399;
+    --border: #1f2b38;
+    --shadow: rgba(0, 0, 0, 0.35);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at top, rgba(97, 218, 251, 0.12), transparent 36%),
+      linear-gradient(180deg, #071019 0%, #091018 22%, #091018 100%);
+    color: var(--text);
+    font-family: "Inter", sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  code,
+  pre {
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .story-nav {
+    position: fixed;
+    top: 50%;
+    right: 1.25rem;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .nav-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    position: relative;
+    transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+  }
+
+  .nav-dot:hover,
+  .nav-dot.active {
+    transform: scale(1.08);
+    background: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+  }
+
+  .nav-tooltip {
+    position: absolute;
+    top: 50%;
+    right: calc(100% + 0.75rem);
+    transform: translateY(-50%);
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(10, 18, 27, 0.95);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: opacity 180ms ease;
+  }
+
+  .nav-dot:hover .nav-tooltip {
+    opacity: 1;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 1.5rem 6rem;
+    position: relative;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: auto auto 10% 50%;
+    transform: translateX(-50%);
+    width: 38rem;
+    height: 38rem;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.11), transparent 68%);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-secondary);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.6rem, 6vw, 4.8rem);
+    line-height: 1.08;
+    max-width: 15ch;
+    color: var(--text-bright);
+  }
+
+  .hero-sub {
+    max-width: 42rem;
+    margin-top: 1.4rem;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+  }
+
+  .scroll-hint {
+    margin-top: 2rem;
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .act {
+    max-width: 54rem;
+    margin: 0 auto;
+    padding: 5rem 1.5rem;
+  }
+
+  .act-label {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent-secondary);
+    margin-bottom: 0.55rem;
+  }
+
+  .act h2 {
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    line-height: 1.15;
+    color: var(--text-bright);
+    margin-bottom: 1.35rem;
+  }
+
+  .act h3 {
+    margin: 2.6rem 0 0.8rem;
+    font-size: 1.25rem;
+    color: var(--text-bright);
+  }
+
+  .act p {
+    margin-bottom: 1rem;
+    font-size: 1.03rem;
+  }
+
+  .divider {
+    max-width: 54rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .divider hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 520ms ease, transform 520ms ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .insight,
+  .metaphor,
+  .vs-card,
+  .option-card,
+  .code-block,
+  .diagram {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 14px 32px -24px var(--shadow);
+  }
+
+  .insight {
+    margin: 1.8rem 0;
+    padding: 1.15rem 1.25rem;
+    background: linear-gradient(135deg, rgba(97, 218, 251, 0.1), rgba(52, 211, 153, 0.06));
+  }
+
+  .insight-label {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent-highlight);
+    margin-bottom: 0.45rem;
+  }
+
+  .metaphor {
+    display: grid;
+    grid-template-columns: 3.4rem 1fr;
+    gap: 1rem;
+    margin: 1.8rem 0;
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .metaphor-mark {
+    width: 3.4rem;
+    height: 3.4rem;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--accent-secondary);
+    font-size: 1.35rem;
+    font-weight: 800;
+  }
+
+  .metaphor-body h4 {
+    color: var(--text-bright);
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+  }
+
+  .metaphor-body p {
+    margin-bottom: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .flow {
+    display: grid;
+    gap: 0.9rem;
+    margin: 1.8rem 0;
+  }
+
+  .flow-step {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.95rem;
+    align-items: start;
+  }
+
+  .flow-num {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: var(--accent-secondary);
+    color: #091018;
+    font-weight: 800;
+    font-size: 0.88rem;
+  }
+
+  .flow-content h4 {
+    color: var(--text-bright);
+    margin-bottom: 0.15rem;
+  }
+
+  .flow-content p {
+    color: var(--text-muted);
+    margin-bottom: 0;
+    font-size: 0.95rem;
+  }
+
+  .vs-grid,
+  .options-grid {
+    display: grid;
+    gap: 1rem;
+    margin: 1.8rem 0;
+  }
+
+  .vs-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .options-grid {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  }
+
+  .vs-card,
+  .option-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vs-card::before,
+  .option-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  }
+
+  .vs-card h4,
+  .option-card h4 {
+    color: var(--text-bright);
+    margin-bottom: 0.55rem;
+  }
+
+  .vs-card p,
+  .option-card p,
+  .vs-card li {
+    color: var(--text-muted);
+    font-size: 0.94rem;
+  }
+
+  .vs-card ul {
+    list-style: none;
+    display: grid;
+    gap: 0.4rem;
+    padding-left: 0;
+  }
+
+  .vs-card li {
+    padding-left: 0.95rem;
+    position: relative;
+  }
+
+  .vs-card li::before {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--accent-primary);
+    left: 0;
+    top: 0.65rem;
+  }
+
+  .option-card code {
+    display: inline-block;
+    margin-bottom: 0.45rem;
+    color: var(--accent-highlight);
+    background: rgba(52, 211, 153, 0.08);
+    padding: 0.18rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.76rem;
+  }
+
+  .code-block {
+    background: var(--bg-code);
+    margin: 1.8rem 0;
+    overflow: hidden;
+  }
+
+  .code-header {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .code-block pre {
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--text-bright);
+  }
+
+  .diagram {
+    background: var(--bg-code);
+    margin: 1.8rem 0;
+    padding: 1rem;
+    white-space: pre-wrap;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.8rem 0;
+    font-size: 0.9rem;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.8rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .comparison-table th {
+    color: var(--text-bright);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .comparison-table td {
+    color: var(--text-muted);
+  }
+
+  .highlight-primary {
+    color: var(--accent-primary);
+    font-weight: 700;
+  }
+
+  .highlight-secondary {
+    color: var(--accent-secondary);
+    font-weight: 700;
+  }
+
+  .highlight-strong {
+    color: var(--accent-highlight);
+    font-weight: 700;
+  }
+
+  .footer {
+    max-width: 54rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .files {
+    margin-top: 0.8rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 960px) {
+    .story-nav {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      min-height: auto;
+      padding-top: 6rem;
+    }
+
+    .vs-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .metaphor {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+<nav class="story-nav">
+  <div class="nav-dot" data-target="hero"><span class="nav-tooltip">Start</span></div>
+  <div class="nav-dot" data-target="act1"><span class="nav-tooltip">The Problem</span></div>
+  <div class="nav-dot" data-target="act2"><span class="nav-tooltip">Core Loop</span></div>
+  <div class="nav-dot" data-target="act3"><span class="nav-tooltip">Variants</span></div>
+  <div class="nav-dot" data-target="act4"><span class="nav-tooltip">State And Safety</span></div>
+  <div class="nav-dot" data-target="act5"><span class="nav-tooltip">Architecture</span></div>
+  <div class="nav-dot" data-target="act6"><span class="nav-tooltip">Failures</span></div>
+  <div class="nav-dot" data-target="act7"><span class="nav-tooltip">Takeaway</span></div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-label">Connector Explainer</div>
+  <h1>How Iggy's Postgres Source Connector Actually Works</h1>
+  <p class="hero-sub">A guided tour for someone who does not know Rust, Apache Iggy, or why state files matter.</p>
+  <div class="scroll-hint">Scroll to explore</div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section class="act" id="act1">
+                  <div class="reveal">
+                    <div class="act-label">Act I</div>
+                    <h2>The Problem</h2>
+                    <p>This repository currently ships a <span class="highlight-primary">Postgres source connector</span>, which means the data direction is <span class="highlight-strong">Postgres -&gt; Iggy</span>. Its job is simple to say and tricky to do well: notice new rows or new database changes, package them as Iggy messages, and resume correctly after restarts.</p>
+
+<div class="metaphor">
+  <div class="metaphor-mark">01</div>
+  <div class="metaphor-body">
+    <h4>A Clerk, Not A Warehouse</h4>
+    <p>The connector is not a full database sync engine. It behaves more like a clerk who checks what is new, labels each package, and hands the batch to the shipping desk.</p>
+  </div>
+</div>
+
+<p>The three actors that matter are: <span class="highlight-secondary">PostgreSQL</span> as the source of truth, the <span class="highlight-secondary">Postgres connector crate</span> as the reader and packager, and the <span class="highlight-secondary">connectors runtime</span> as the part that actually sends messages into Iggy and saves the checkpoint file.</p>
+
+<p>If you do not know Rust, the core lifecycle words are pleasantly ordinary: <code>open</code> means start up, <code>poll</code> means check for new work, and <code>close</code> means shut down. That is the whole heartbeat we are about to trace.</p>
+
+<div class="insight">
+  <div class="insight-label">Working Thesis</div>
+  <p>The Postgres source connector reads from Postgres and builds batches, but the shared runtime owns the final delivery into Iggy and the durable state-file write.</p>
+</div>
+                  </div>
+                </section>
+
+<div class="divider"><hr></div>
+
+<section class="act" id="act2">
+                  <div class="reveal">
+                    <div class="act-label">Act II</div>
+                    <h2>The Core Loop</h2>
+                    <p>The connector's real rhythm is <span class="highlight-strong">open -&gt; wait -&gt; read -&gt; package -&gt; publish -&gt; checkpoint</span>. The important twist is that the last two steps happen in the runtime, not inside the Postgres-specific crate.</p>
+
+<div class="flow">
+  <div class="flow-step">
+    <div class="flow-num">1</div>
+    <div class="flow-content">
+      <h4>Open</h4>
+      <p>The runtime loads the connector as a dynamic library, passes in JSON config plus any saved state, and calls <code>open()</code>. The connector creates a Postgres connection pool, runs <code>SELECT 1</code> as a smoke test, and, in CDC mode, may create a publication and replication slot.</p>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">2</div>
+    <div class="flow-content">
+      <h4>Sleep, Then Poll</h4>
+      <p>Every <code>poll()</code> call begins with <code>sleep(poll_interval)</code>, so the first fetch happens after one full interval. Then the connector picks one branch: table polling or CDC.</p>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">3</div>
+    <div class="flow-content">
+      <h4>Build Messages</h4>
+      <p>Rows or change records become <code>ProducedMessage</code> values. The connector chooses a schema of <code>json</code>, <code>raw</code>, or <code>text</code>, stamps IDs and timestamps, and optionally returns a serialized state snapshot alongside the batch.</p>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">4</div>
+    <div class="flow-content">
+      <h4>Runtime Publishes To Iggy</h4>
+      <p>The SDK serializes the batch over the plugin boundary, the runtime decodes it, applies any configured transforms, re-encodes it for the target stream schema, and sends it to the configured Iggy stream and topic.</p>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">5</div>
+    <div class="flow-content">
+      <h4>Save Progress</h4>
+      <p>Only after a successful send does the runtime write the connector state file. That saved state becomes the resume point for the next process start.</p>
+    </div>
+  </div>
+</div>
+
+<div class="insight">
+  <div class="insight-label">Key Insight</div>
+  <p>The Postgres crate never calls an Iggy client directly. It hands batches back to the shared runtime, which is why publishing, transforms, metrics, and durable state saving all live outside the connector itself.</p>
+</div>
+                  </div>
+                </section>
+
+<div class="divider"><hr></div>
+
+<section class="act" id="act3">
+                  <div class="reveal">
+                    <div class="act-label">Act III</div>
+                    <h2>Key Variants Or Modes</h2>
+                    <p>The connector has two very different personalities. <span class="highlight-primary">Polling</span> asks tables for rows. <span class="highlight-primary">CDC</span> asks Postgres for change records from a logical replication slot.</p>
+
+        <div class="vs-grid">
+          <div class="vs-card">
+            <h4>Polling Mode</h4>
+            <ul>
+              <li>Builds a <code>SELECT * FROM table ... ORDER BY tracking_column ASC LIMIT batch_size</code> query, unless you supply a custom query.</li>
+              <li>Tracks progress per table in a local <code>tracking_offsets</code> map stored inside connector state.</li>
+              <li>Can start from a saved offset, an <code>initial_offset</code>, or the beginning if neither exists.</li>
+              <li>Supports queue-like tables by deleting rows after reading or marking them processed with a boolean column.</li>
+            </ul>
+          </div>
+          <div class="vs-card">
+            <h4>CDC Mode</h4>
+            <ul>
+              <li>Reads from <code>pg_logical_slot_get_changes(...)</code> instead of repeatedly scanning application tables.</li>
+              <li>Can auto-create publication and slot only when <code>enable_wal_cdc = true</code>; otherwise it assumes those objects already exist.</li>
+              <li>Parses textual logical decoding messages into <code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code> records.</li>
+              <li>The documented <code>pg_replicate</code> backend is not implemented in this crate today unless future feature work lands; the working path here is the builtin backend.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="options-grid">
+          <div class="option-card">
+            <code>payload</code>
+            <h4>Full Row Envelope</h4>
+            <p>Without <code>payload_column</code>, the connector wraps data in a <code>DatabaseRecord</code> shape with table name, operation type, timestamp, row data, and optional old data.</p>
+          </div>
+          <div class="option-card">
+            <code>payload_column</code>
+            <h4>Direct Payload Extraction</h4>
+            <p>If you point at one column, the connector can emit that column directly as raw bytes, UTF-8 text, or JSON bytes. This is the cleanest way to avoid the row wrapper.</p>
+          </div>
+          <div class="option-card">
+            <code>custom_query</code>
+            <h4>Bring Your Own SQL</h4>
+            <p>The connector can replace placeholders like <code>$table</code>, <code>$offset</code>, <code>$limit</code>, and <code>$now</code>. That gives flexibility, but you own the correctness of the SQL text.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">Representative snippet</div>
+          <pre>poll():
+  sleep(poll_interval)
+  if mode == "polling":
+    SELECT * FROM "table"
+    WHERE "tracking_column" &gt; last_offset
+    ORDER BY "tracking_column" ASC
+    LIMIT batch_size
+  else if mode == "cdc":
+    SELECT lsn, xid, data
+    FROM pg_logical_slot_get_changes(slot_name, NULL, NULL, ...)</pre>
+        </div>
+                  </div>
+                </section>
+
+<div class="divider"><hr></div>
+
+<section class="act" id="act4">
+                  <div class="reveal">
+                    <div class="act-label">Act IV</div>
+                    <h2>State, Safety, And Recovery</h2>
+                    <p>This is where most connector explanations become fuzzy, so let's be precise. The crate keeps some state in memory, serializes it into a blob, and the runtime writes that blob to disk <span class="highlight-secondary">only after successful publish to Iggy</span>.</p>
+
+        <div class="diagram">poll Postgres
+  |
+  v
+build ProducedMessages + optional state blob
+  |
+  +--> runtime sends to Iggy successfully
+  |      |
+  |      +--> save source_KEY.state
+  |
+  +--> runtime send fails
+         |
+         +--> do not advance local state file</div>
+
+        <div class="options-grid">
+          <div class="option-card">
+            <code>state</code>
+            <h4>What Is Persisted</h4>
+            <p>The state blob contains <code>last_poll_time</code>, a per-table <code>tracking_offsets</code> map, and <code>processed_rows</code>. In polling mode, <code>tracking_offsets</code> are the real resume markers. In CDC mode, the deeper progress marker mostly lives in PostgreSQL's replication slot.</p>
+          </div>
+          <div class="option-card">
+            <code>success</code>
+            <h4>What Happens On Success</h4>
+            <p>If the runtime publishes the batch successfully, it saves the returned state file. On restart, the connector restores that file and continues from the remembered offsets instead of scanning from scratch.</p>
+          </div>
+          <div class="option-card">
+            <code>failure</code>
+            <h4>What Happens On Failure</h4>
+            <p>Transient polling reads retry with backoff. If publish to Iggy fails, the local state file is not updated, so plain offset-based polling can replay rows next time. But cleanup modes complicate that story because source rows may already be deleted or marked processed before publish is confirmed.</p>
+          </div>
+        </div>
+
+        <div class="insight">
+          <div class="insight-label">Reliability Note</div>
+          <p>The safest replay model here is polling with a stable tracking column and no source-side cleanup. The riskiest modes are <code>delete_after_read</code>, <code>processed_column</code>, and CDC slot consumption, because those advance or mutate the Postgres-side notion of progress before the runtime has finished confirming delivery into Iggy.</p>
+        </div>
+                  </div>
+                </section>
+
+<div class="divider"><hr></div>
+
+<section class="act" id="act5">
+                  <div class="reveal">
+                    <div class="act-label">Act V</div>
+                    <h2>Architecture And Boundaries</h2>
+                    <p>The easiest way to understand the architecture is to separate <span class="highlight-primary">what the connector owns</span> from <span class="highlight-primary">what the runtime owns</span>. The boundary is much cleaner than it first appears.</p>
+
+      <div class="diagram">connectors runtime
+|
++--> SDK / FFI wrapper
+       |
+       +--> postgres_source plugin
+       |      |
+       |      +--> open / poll / close
+       |      +--> Postgres pool or replication slot
+       |
+       +--> decode / transform / encode / publish
+       +--> save state file
+       +--> metrics, status, start/stop/restart</div>
+
+      <div class="vs-grid">
+        <div class="vs-card">
+          <h4>What The Connector Owns</h4>
+          <ul>
+            <li>Open the Postgres connection pool and optional CDC setup.</li>
+            <li>Build polling SQL or read logical change records.</li>
+            <li>Turn rows into JSON, text, or raw payloads.</li>
+            <li>Keep short-lived in-memory state and serialize it when returning a batch.</li>
+          </ul>
+        </div>
+        <div class="vs-card">
+          <h4>What The Runtime Owns</h4>
+          <ul>
+            <li>Load the plugin, invoke <code>open</code>, start the background polling loop, and call <code>close</code>.</li>
+            <li>Decode payloads, apply configured transforms, encode for the target topic, and publish into Iggy.</li>
+            <li>Persist state files, expose metrics and HTTP status, and manage restart or shutdown.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="insight">
+        <div class="insight-label">Practical Translation</div>
+        <p>When you read the Rust files, treat the Postgres crate as the adapter and the runtime as the control plane. That mental split makes the codebase much easier to navigate.</p>
+      </div>
+                  </div>
+                </section>
+
+<div class="divider"><hr></div>
+
+<section class="act" id="act6">
+                  <div class="reveal">
+                    <div class="act-label">Act VI</div>
+                    <h2>Failure Modes And Tradeoffs</h2>
+                    <p>The connector is refreshingly explicit about some failures and a little optimistic about others. The right mental model is not "perfectly exactly once," but "understand where replay is possible and where progress can outrun delivery."</p>
+
+<div class="vs-grid">
+  <div class="vs-card">
+    <h4>Retryable</h4>
+    <ul>
+      <li>Transient SQLx errors during polling reads, including I/O issues and pool timeouts.</li>
+      <li>Selected PostgreSQL database error codes such as serialization failures and deadlocks.</li>
+      <li>Backoff grows by <code>retry_delay * attempt_number</code>, so later retries wait longer.</li>
+    </ul>
+  </div>
+  <div class="vs-card">
+    <h4>Fatal</h4>
+    <ul>
+      <li>Bad mode values, bad identifiers, or startup failures such as "cannot connect to Postgres".</li>
+      <li>CDC requirements not met, such as missing logical WAL setup or unavailable backend support.</li>
+      <li>Publish failures to Iggy, invalid payload extraction, or incorrect custom SQL.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="options-grid">
+  <div class="option-card">
+    <code>tradeoff</code>
+    <h4>Correctness</h4>
+    <p>Plain polling without cleanup leans toward replay over silent loss. Cleanup options make the source table tidier, but they can erase replay opportunities if the later Iggy send fails.</p>
+  </div>
+  <div class="option-card">
+    <code>tradeoff</code>
+    <h4>Performance</h4>
+    <p><code>batch_size</code>, <code>poll_interval</code>, and <code>max_connections</code> control how aggressively the connector reads. One easy-to-miss detail: startup is not eager, because the first real poll happens after one sleep interval.</p>
+  </div>
+  <div class="option-card">
+    <code>tradeoff</code>
+    <h4>Operability</h4>
+    <p>The connector redacts the connection string in logs, can switch to more verbose info-level logging, and benefits from runtime-level metrics and on-disk state files when you need to debug restart behavior.</p>
+  </div>
+</div>
+
+<div class="insight">
+  <div class="insight-label">Skeptical Lens</div>
+  <p>If you want the cleanest correctness story, avoid assuming that every mode has the same delivery semantics. Polling with offsets, polling with source cleanup, and CDC via slot consumption behave differently under failure.</p>
+</div>
+                  </div>
+                </section>
+
+<div class="divider"><hr></div>
+
+<section class="act" id="act7">
+                  <div class="reveal">
+                    <div class="act-label">Act VII</div>
+                    <h2>The Big Picture</h2>
+                    <p>Here is the short version you can keep in your head after closing the browser: this connector is a <span class="highlight-strong">Postgres reader plus message packager</span>. The runtime is the <span class="highlight-strong">publisher plus checkpoint clerk</span>.</p>
+
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th>Dimension</th>
+      <th>Polling</th>
+      <th>CDC</th>
+      <th>Why It Matters</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Input</td>
+      <td>Table rows returned by SQL queries</td>
+      <td>Logical change records returned by a replication slot</td>
+      <td>You choose between scanning for rows and subscribing to database changes.</td>
+    </tr>
+    <tr>
+      <td>Progress Anchor</td>
+      <td>Local <code>tracking_offsets</code> in a state file</td>
+      <td>Replication slot progress in Postgres, plus local stats state</td>
+      <td>Recovery depends on different systems in each mode.</td>
+    </tr>
+    <tr>
+      <td>Payload Shape</td>
+      <td>Full row envelope or one extracted payload column</td>
+      <td>Change-event envelope for INSERT, UPDATE, DELETE</td>
+      <td>Consumers may receive snapshots of rows or a stream of change events.</td>
+    </tr>
+    <tr>
+      <td>Failure Posture</td>
+      <td>Replay-friendly if you only advance local offsets</td>
+      <td>Slot consumption can outrun downstream confirmation</td>
+      <td>The recovery story is configuration-sensitive, not universal.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="insight">
+  <div class="insight-label">One Line Summary</div>
+  <p>Connect to Postgres, wait, read what is new, hand the batch to the runtime, publish to Iggy, and only then trust the checkpoint you can safely resume from.</p>
+</div>
+                  </div>
+                </section>
+
+<footer class="footer">
+  <p>Built from source</p>
+  <p style="margin-top: 0.8rem;">One external verification was used for the CDC explanation: PostgreSQL documents that <code>pg_logical_slot_get_changes()</code> consumes changes from the slot, while <code>pg_logical_slot_peek_changes()</code> does not.</p>
+  <div class="files">
+    core/connectors/sources/postgres_source/src/lib.rs<br>
+    core/connectors/sources/postgres_source/README.md<br>
+    core/connectors/sdk/src/lib.rs<br>
+    core/connectors/sdk/src/source.rs<br>
+    core/connectors/runtime/src/source.rs<br>
+    core/connectors/runtime/src/state.rs<br>
+    core/connectors/runtime/src/manager/source.rs<br>
+    <a href="https://www.postgresql.org/docs/current/functions-admin.html">postgresql.org docs: System Administration Functions</a>
+  </div>
+</footer>
+
+<script>
+const revealNodes = document.querySelectorAll(".reveal");
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+    }
+  });
+}, { threshold: 0.12 });
+revealNodes.forEach((node) => revealObserver.observe(node));
+
+const navDots = document.querySelectorAll(".nav-dot");
+navDots.forEach((dot) => {
+  dot.addEventListener("click", () => {
+    const targetId = dot.getAttribute("data-target");
+    const targetNode = document.getElementById(targetId);
+    if (targetNode) {
+      targetNode.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+});
+
+const sectionNodes = Array.from(navDots)
+  .map((dot) => document.getElementById(dot.getAttribute("data-target")))
+  .filter(Boolean);
+
+const activeObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) {
+      return;
+    }
+    navDots.forEach((dot) => dot.classList.remove("active"));
+    const activeDot = document.querySelector(`.nav-dot[data-target="${entry.target.id}"]`);
+    if (activeDot) {
+      activeDot.classList.add("active");
+    }
+  });
+}, { threshold: 0.35 });
+
+sectionNodes.forEach((node) => activeObserver.observe(node));
+</script>
+</body>
+</html>
