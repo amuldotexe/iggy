@@ -1,0 +1,5 @@
+tool	available
+rg	yes
+ctags	no
+ast-grep	yes
+dot	no
